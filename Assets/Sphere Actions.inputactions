@@ -1,0 +1,71 @@
+{
+    "name": "Sphere Actions",
+    "maps": [
+        {
+            "name": "Actions",
+            "id": "1cc9605e-8d62-4bff-af53-0d19fc603030",
+            "actions": [
+                {
+                    "name": "Hit",
+                    "type": "Button",
+                    "id": "9a3c1d35-9388-4fc9-9bf2-16690ab549e9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Hide",
+                    "type": "Button",
+                    "id": "d517254e-5e5f-4954-b9d9-c2693aeace04",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Show",
+                    "type": "Button",
+                    "id": "667c1935-432f-413b-b3f4-9943795cbd0e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9559358c-3cfe-453d-a015-ec98ee101076",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3e8b27d0-73fb-4c53-b69d-45bd0e12a0b0",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hide",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "36ef5bd6-980f-40ca-957a-fa4fb7915d88",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Show",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
