@@ -9,7 +9,7 @@
                     "name": "Hit",
                     "type": "Button",
                     "id": "9a3c1d35-9388-4fc9-9bf2-16690ab549e9",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -33,8 +33,8 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "9559358c-3cfe-453d-a015-ec98ee101076",
-                    "path": "<Keyboard>/space",
+                    "id": "b7f0b311-7b82-462c-933d-d3dcdc3ea0e8",
+                    "path": "<CustomDevice>/firstButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -44,8 +44,8 @@
                 },
                 {
                     "name": "",
-                    "id": "3e8b27d0-73fb-4c53-b69d-45bd0e12a0b0",
-                    "path": "<Keyboard>/z",
+                    "id": "29c5eeaf-635f-48b7-ad22-2de7cfe65297",
+                    "path": "<CustomDevice>/secondButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -55,8 +55,8 @@
                 },
                 {
                     "name": "",
-                    "id": "36ef5bd6-980f-40ca-957a-fa4fb7915d88",
-                    "path": "<Keyboard>/x",
+                    "id": "a79ccf2b-5a88-45f0-9f66-ba348d505f9c",
+                    "path": "<CustomDevice>/thirdButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
