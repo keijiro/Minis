@@ -34,7 +34,7 @@
                 {
                     "name": "",
                     "id": "b7f0b311-7b82-462c-933d-d3dcdc3ea0e8",
-                    "path": "<CustomDevice>/firstButton",
+                    "path": "<CustomDevice>/control0",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -45,7 +45,7 @@
                 {
                     "name": "",
                     "id": "29c5eeaf-635f-48b7-ad22-2de7cfe65297",
-                    "path": "<CustomDevice>/secondButton",
+                    "path": "<CustomDevice>/control1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -56,7 +56,7 @@
                 {
                     "name": "",
                     "id": "a79ccf2b-5a88-45f0-9f66-ba348d505f9c",
-                    "path": "<CustomDevice>/thirdButton",
+                    "path": "<CustomDevice>/control2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
