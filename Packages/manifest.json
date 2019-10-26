@@ -1,5 +1,15 @@
 {
+  "scopedRegistries": [
+    {
+      "name": "Keijiro",
+      "url": "https://registry.npmjs.com",
+      "scopes": [
+        "jp.keijiro"
+      ]
+    }
+  ],
   "dependencies": {
+    "jp.keijiro.midi-jack": "0.0.1",
     "com.unity.inputsystem": "1.0.0-preview.1",
     "com.unity.timeline": "1.2.4",
     "com.unity.modules.director": "1.0.0",
