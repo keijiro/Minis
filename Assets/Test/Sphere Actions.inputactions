@@ -14,18 +14,10 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Hide",
-                    "type": "Button",
-                    "id": "d517254e-5e5f-4954-b9d9-c2693aeace04",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Show",
-                    "type": "Button",
-                    "id": "667c1935-432f-413b-b3f4-9943795cbd0e",
-                    "expectedControlType": "",
+                    "name": "Scale",
+                    "type": "Value",
+                    "id": "22121f7f-0c46-4e97-abd0-2f46d2c1ce1d",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
                 }
@@ -34,7 +26,7 @@
                 {
                     "name": "",
                     "id": "b7f0b311-7b82-462c-933d-d3dcdc3ea0e8",
-                    "path": "<CustomDevice>/note40",
+                    "path": "<CustomDevice>/note040",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -44,23 +36,12 @@
                 },
                 {
                     "name": "",
-                    "id": "29c5eeaf-635f-48b7-ad22-2de7cfe65297",
-                    "path": "<CustomDevice>/note41",
+                    "id": "0fe0f695-e3c1-4340-b2d2-674a45f62378",
+                    "path": "<CustomDevice>/control001",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Hide",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a79ccf2b-5a88-45f0-9f66-ba348d505f9c",
-                    "path": "<CustomDevice>/note42",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Show",
+                    "action": "Scale",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -324,6 +324,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1325051999}
   - component: {fileID: 1325051998}
+  - component: {fileID: 1325052000}
   m_Layer: 0
   m_Name: Sphere Controller
   m_TagString: Untagged
@@ -382,9 +383,9 @@ MonoBehaviour:
     m_ActionName: Actions/Hit[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 581947670}
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 1325052000}
+        m_MethodName: OnAction
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -393,23 +394,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: d517254e-5e5f-4954-b9d9-c2693aeace04
-    m_ActionName: Actions/Toggle[/Keyboard/enter]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 581947670}
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-    m_ActionId: 667c1935-432f-413b-b3f4-9943795cbd0e
-    m_ActionName: Actions/Show[/Keyboard/x]
+    m_ActionId: 22121f7f-0c46-4e97-abd0-2f46d2c1ce1d
+    m_ActionName: Actions/Scale
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: 1cc9605e-8d62-4bff-af53-0d19fc603030
@@ -429,3 +415,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1325052000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325051997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252310bfd4418bc418820bf898d8049b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetType: 2
+  _intValueMin: 0
+  _intValueMax: 100
+  _floatValueMin: 0
+  _floatValueMax: 1
+  _vector3ValueMin: {x: 0, y: 0, z: 0}
+  _vector3ValueMax: {x: 1, y: 1, z: 1}
+  _intEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  _floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  _vector3Event:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 581947672}
+        m_MethodName: set_localScale
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
