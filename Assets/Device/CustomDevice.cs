@@ -284,6 +284,26 @@ public class CustomDevice : InputDevice, IInputUpdateCallbackReceiver
     static CustomDevice()
     {
         Initialize();
+
+        UnityEditor.EditorApplication.playModeStateChanged
+            += OnPlayModeStateChange;
+    }
+
+    static void OnPlayModeStateChange(UnityEditor.PlayModeStateChange state)
+    {
+        if (state == UnityEditor.PlayModeStateChange.EnteredPlayMode)
+        {
+            InputSystem.AddDevice(new InputDeviceDescription
+            {
+                interfaceName = "Custom",
+                product = "Sample Product"
+            });
+        }
+        else if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
+        {
+            var customDevice = InputSystem.devices.FirstOrDefault(x => x is CustomDevice);
+            if (customDevice != null) InputSystem.RemoveDevice(customDevice);
+        }
     }
 
     #endif
@@ -360,26 +380,6 @@ public class CustomDevice : InputDevice, IInputUpdateCallbackReceiver
         _modified = true;
     }
 
-    #if UNITY_EDITOR
-
-    [UnityEditor.MenuItem("Tools/Custom Device Sample/Create Device")]
-    private static void CreateDevice()
-    {
-        InputSystem.AddDevice(new InputDeviceDescription
-        {
-            interfaceName = "Custom",
-            product = "Sample Product"
-        });
-    }
-
-    [UnityEditor.MenuItem("Tools/Custom Device Sample/Remove Device")]
-    private static void RemoveDevice()
-    {
-        var customDevice = InputSystem.devices.FirstOrDefault(x => x is CustomDevice);
-        if (customDevice != null)
-            InputSystem.RemoveDevice(customDevice);
-    }
-
     public void OnUpdate()
     {
         if (_modified)
@@ -388,6 +388,4 @@ public class CustomDevice : InputDevice, IInputUpdateCallbackReceiver
             _modified = false;
         }
     }
-
-    #endif
 }
