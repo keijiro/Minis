@@ -277,7 +277,7 @@ public unsafe struct CustomDeviceState : IInputStateTypeInfo
 [UnityEditor.InitializeOnLoad]
 #endif
 [InputControlLayout(stateType = typeof(CustomDeviceState))]
-public class CustomDevice : InputDevice
+public class CustomDevice : InputDevice, IInputUpdateCallbackReceiver
 {
     #if UNITY_EDITOR
 
@@ -298,6 +298,7 @@ public class CustomDevice : InputDevice
     ButtonControl [] _notes;
     AxisControl [] _controls;
     CustomDeviceState _state;
+    bool _modified;
 
     public ButtonControl GetNote(int index)
     {
@@ -344,19 +345,19 @@ public class CustomDevice : InputDevice
     void OnNoteOn(MidiChannel channel, int note, float velocity)
     {
         unsafe { _state.notes[note] = (byte)(velocity * 127); }
-        InputSystem.QueueStateEvent(this, _state);
+        InputSystem.QueueDeltaStateEvent(_notes[note], (byte)(velocity * 127));
     }
 
     void OnNoteOff(MidiChannel channel, int note)
     {
         unsafe { _state.notes[note] = 0; }
-        InputSystem.QueueStateEvent(this, _state);
+        InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
     }
 
     void OnKnob(MidiChannel channel, int knobNumber, float knobValue)
     {
         unsafe { _state.controls[knobNumber] = (byte)(knobValue * 127); }
-        InputSystem.QueueStateEvent(this, _state);
+        _modified = true;
     }
 
     #if UNITY_EDITOR
@@ -377,6 +378,15 @@ public class CustomDevice : InputDevice
         var customDevice = InputSystem.devices.FirstOrDefault(x => x is CustomDevice);
         if (customDevice != null)
             InputSystem.RemoveDevice(customDevice);
+    }
+
+    public void OnUpdate()
+    {
+        if (_modified)
+        {
+            InputSystem.QueueStateEvent(this, _state);
+            _modified = false;
+        }
     }
 
     #endif
