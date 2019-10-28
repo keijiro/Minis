@@ -4,14 +4,15 @@ using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.LowLevel;
 using MidiJack;
 
+// MIDI device class driven by MidiJack plugin
+
 namespace MidiJack2
 {
     [InputControlLayout(
         stateType = typeof(MidiDeviceState),
-        displayName = "Generic MIDI",
-        description = "Generic MIDI Input Device"
+        displayName = "MIDI Device"
     )]
-    public sealed class GenericMidiDevice : InputDevice, IInputUpdateCallbackReceiver
+    public sealed class MidiDevice : InputDevice, IInputUpdateCallbackReceiver
     {
         #region Public accessors
 
@@ -36,39 +37,7 @@ namespace MidiJack2
 
         #endregion
 
-        #region InputDevice implementation
-
-        protected override void FinishSetup()
-        {
-            base.FinishSetup();
-
-            MidiMaster.noteOnDelegate += OnNoteOn;
-            MidiMaster.noteOffDelegate += OnNoteOff;
-            MidiMaster.knobDelegate += OnKnob;
-
-            _notes = new ButtonControl[128];
-            _controls = new AxisControl[128];
-
-            for (var i = 0; i < 128; i++)
-            {
-                _notes[i] = GetChildControl<ButtonControl>("note" + i.ToString("D3"));
-                _controls[i] = GetChildControl<AxisControl>("control" + i.ToString("D3"));
-            }
-        }
-
-        public static GenericMidiDevice current { get; private set; }
-
-        public override void MakeCurrent()
-        {
-            base.MakeCurrent();
-            current = this;
-        }
-
-        protected override void OnRemoved()
-        {
-            base.OnRemoved();
-            if (current == this) current = null;
-        }
+        #region MidiJack callbacks
 
         void OnNoteOn(MidiChannel channel, int note, float velocity)
         {
@@ -87,6 +56,46 @@ namespace MidiJack2
             unsafe { _state.controls[knobNumber] = (byte)(knobValue * 127); }
             _controlModified = true;
         }
+
+        #endregion
+
+        #region InputDevice implementation
+
+        protected override void FinishSetup()
+        {
+            base.FinishSetup();
+
+            _notes = new ButtonControl[128];
+            _controls = new AxisControl[128];
+
+            for (var i = 0; i < 128; i++)
+            {
+                _notes[i] = GetChildControl<ButtonControl>("note" + i.ToString("D3"));
+                _controls[i] = GetChildControl<AxisControl>("control" + i.ToString("D3"));
+            }
+
+            MidiMaster.noteOnDelegate += OnNoteOn;
+            MidiMaster.noteOffDelegate += OnNoteOff;
+            MidiMaster.knobDelegate += OnKnob;
+        }
+
+        public static MidiDevice current { get; private set; }
+
+        public override void MakeCurrent()
+        {
+            base.MakeCurrent();
+            current = this;
+        }
+
+        protected override void OnRemoved()
+        {
+            base.OnRemoved();
+            if (current == this) current = null;
+        }
+
+        #endregion
+
+        #region IInputUpdateCallbackReceiver implementation
 
         public void OnUpdate()
         {

@@ -3,12 +3,12 @@
     "maps": [
         {
             "name": "Actions",
-            "id": "3a7b8ed3-3f12-4794-9342-cae05230bc55",
+            "id": "24017309-51fb-49d4-9888-52a3e74ae9c4",
             "actions": [
                 {
                     "name": "Hit",
                     "type": "Button",
-                    "id": "6a6d5a77-aa0c-4b67-87be-b00d476295b4",
+                    "id": "d4df89af-d9ef-4f96-9f77-b00c6fefbdc1",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -16,7 +16,7 @@
                 {
                     "name": "Scale",
                     "type": "Value",
-                    "id": "3cbb222a-9549-4bf6-87f3-b9b1d3815852",
+                    "id": "ca322236-ae16-47ad-b9a5-f40ec222dc23",
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
@@ -25,8 +25,8 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "5852a238-55a5-400e-ac65-0e71839acfe4",
-                    "path": "<GenericMidiDevice>/note040",
+                    "id": "49daf170-c962-49f4-9eed-ff9f2c724b3f",
+                    "path": "<MidiDevice>/note040",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -36,8 +36,8 @@
                 },
                 {
                     "name": "",
-                    "id": "8e3f5a5e-e711-41d6-ac66-3c7b5ff81fe6",
-                    "path": "<GenericMidiDevice>/control001",
+                    "id": "b1570228-5a45-4cce-965e-f7823580e7be",
+                    "path": "<MidiDevice>/control001",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -379,7 +379,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 6a6d5a77-aa0c-4b67-87be-b00d476295b4
+    m_ActionId: d4df89af-d9ef-4f96-9f77-b00c6fefbdc1
     m_ActionName: Actions/Hit
   - m_PersistentCalls:
       m_Calls:
@@ -394,11 +394,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 3cbb222a-9549-4bf6-87f3-b9b1d3815852
+    m_ActionId: ca322236-ae16-47ad-b9a5-f40ec222dc23
     m_ActionName: Actions/Scale
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 3a7b8ed3-3f12-4794-9342-cae05230bc55
+  m_DefaultActionMap: 24017309-51fb-49d4-9888-52a3e74ae9c4
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!4 &1325051999

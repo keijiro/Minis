@@ -4,6 +4,8 @@ using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Utilities;
 
+// Generic MIDI state struct with 128 notes and 128 controls
+
 namespace MidiJack2
 {
     [StructLayout(LayoutKind.Sequential)]
