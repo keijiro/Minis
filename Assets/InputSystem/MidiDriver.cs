@@ -1,5 +1,6 @@
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Layouts;
+using MidiJack;
 
 // A wrangler class that installs/uninstalls MidiDevice on play mode changes.
 
@@ -25,9 +26,9 @@ namespace MidiJack2
         static void OnPlayModeStateChange(UnityEditor.PlayModeStateChange state)
         {
             if (state == UnityEditor.PlayModeStateChange.EnteredPlayMode)
-                AddDevice();
+                SetMidiCallback();
             else if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
-                RemoveDevice();
+                RemoveDevices();
         }
 
         #else
@@ -39,10 +40,55 @@ namespace MidiJack2
         static void Initialize()
         {
             RegisterLayout();
-            AddDevice();
+            SetMidiCallback();
         }
 
         #endif
+
+        #endregion
+
+        #region MIDI callbacks
+
+        static MidiDevice [] _devices = new MidiDevice[16];
+
+        static MidiDevice GetDevice(int channel)
+        {
+            if (_devices[channel] == null)
+            {
+                var desc = new InputDeviceDescription {
+                    interfaceName = "MidiJack2",
+                    deviceClass = "MIDI",
+                    product = "MIDI Device Channel " + channel,
+                    capabilities = "{\"channel\":" + channel + "}"
+                };
+
+                _devices[channel] = (MidiDevice)InputSystem.AddDevice(desc);
+            }
+
+            return _devices[channel];
+        }
+
+        static void SetMidiCallback()
+        {
+            MidiMaster.noteOnDelegate += OnNoteOn;
+            MidiMaster.noteOffDelegate += OnNoteOff;
+            MidiMaster.knobDelegate += OnKnob;
+        }
+
+        static void OnNoteOn(MidiChannel channel, int note, float velocity)
+        {
+            GetDevice((int)channel).OnNoteOn(note, velocity);
+        }
+
+        static void OnNoteOff(MidiChannel channel, int note)
+        {
+            GetDevice((int)channel).OnNoteOff(note);
+        }
+
+        static void OnKnob(MidiChannel channel, int knobNumber, float knobValue)
+        {
+            GetDevice((int)channel).OnKnob(knobNumber, knobValue);
+        }
 
         #endregion
 
@@ -55,24 +101,7 @@ namespace MidiJack2
             );
         }
 
-        static void AddDevice()
-        {
-            InputSystem.AddDevice(new InputDeviceDescription {
-                interfaceName = "MidiJack2",
-                deviceClass = "MIDI",
-                product = "MIDI Device Channel 1",
-                capabilities = "{\"channel\":1}"
-            });
-
-            InputSystem.AddDevice(new InputDeviceDescription {
-                interfaceName = "MidiJack2",
-                deviceClass = "MIDI",
-                product = "MIDI Device Channel 2",
-                capabilities = "{\"channel\":2}"
-            });
-        }
-
-        static void RemoveDevice()
+        static void RemoveDevices()
         {
             var stack = new System.Collections.Generic.Stack<InputDevice>();
 

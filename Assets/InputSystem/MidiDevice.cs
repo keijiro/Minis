@@ -2,7 +2,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.LowLevel;
-using MidiJack;
 
 // MIDI device class driven by MidiJack plugin
 
@@ -37,21 +36,21 @@ namespace MidiJack2
 
         #endregion
 
-        #region MidiJack callbacks
+        #region MIDI event receiver
 
-        void OnNoteOn(MidiChannel channel, int note, float velocity)
+        public void OnNoteOn(int note, float velocity)
         {
             unsafe { _state.notes[note] = (byte)(velocity * 127); }
             InputSystem.QueueDeltaStateEvent(_notes[note], (byte)(velocity * 127));
         }
 
-        void OnNoteOff(MidiChannel channel, int note)
+        public void OnNoteOff(int note)
         {
             unsafe { _state.notes[note] = 0; }
             InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
         }
 
-        void OnKnob(MidiChannel channel, int knobNumber, float knobValue)
+        public void OnKnob(int knobNumber, float knobValue)
         {
             unsafe { _state.controls[knobNumber] = (byte)(knobValue * 127); }
             _controlModified = true;
@@ -75,10 +74,6 @@ namespace MidiJack2
                 _notes[i] = GetChildControl<ButtonControl>("note" + i.ToString("D3"));
                 _controls[i] = GetChildControl<AxisControl>("control" + i.ToString("D3"));
             }
-
-            MidiMaster.noteOnDelegate += OnNoteOn;
-            MidiMaster.noteOffDelegate += OnNoteOff;
-            MidiMaster.knobDelegate += OnKnob;
         }
 
         public static MidiDevice current { get; private set; }
