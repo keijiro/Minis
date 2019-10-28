@@ -60,14 +60,26 @@ namespace MidiJack2
             InputSystem.AddDevice(new InputDeviceDescription {
                 interfaceName = "MidiJack2",
                 deviceClass = "MIDI",
-                product = "MIDI Device"
+                product = "MIDI Device Channel 1",
+                capabilities = "{\"channel\":1}"
+            });
+
+            InputSystem.AddDevice(new InputDeviceDescription {
+                interfaceName = "MidiJack2",
+                deviceClass = "MIDI",
+                product = "MIDI Device Channel 2",
+                capabilities = "{\"channel\":2}"
             });
         }
 
         static void RemoveDevice()
         {
+            var stack = new System.Collections.Generic.Stack<InputDevice>();
+
             foreach (var dev in InputSystem.devices)
-                if (dev is MidiDevice) InputSystem.RemoveDevice(dev);
+                if (dev is MidiDevice) stack.Push(dev);
+
+            while (stack.Count > 0) InputSystem.RemoveDevice(stack.Pop());
         }
 
         #endregion

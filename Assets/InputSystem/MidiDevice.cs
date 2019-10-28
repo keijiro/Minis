@@ -65,6 +65,8 @@ namespace MidiJack2
         {
             base.FinishSetup();
 
+            UnityEngine.Debug.Log(description.capabilities);
+
             _notes = new ButtonControl[128];
             _controls = new AxisControl[128];
 
