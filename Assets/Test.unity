@@ -379,8 +379,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 9a3c1d35-9388-4fc9-9bf2-16690ab549e9
-    m_ActionName: Actions/Hit[/Keyboard/space]
+    m_ActionId: 6a6d5a77-aa0c-4b67-87be-b00d476295b4
+    m_ActionName: Actions/Hit
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1325052000}
@@ -394,11 +394,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 22121f7f-0c46-4e97-abd0-2f46d2c1ce1d
+    m_ActionId: 3cbb222a-9549-4bf6-87f3-b9b1d3815852
     m_ActionName: Actions/Scale
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 1cc9605e-8d62-4bff-af53-0d19fc603030
+  m_DefaultActionMap: 3a7b8ed3-3f12-4794-9342-cae05230bc55
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!4 &1325051999
