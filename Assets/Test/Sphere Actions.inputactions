@@ -29,7 +29,7 @@
                     "path": "<MidiDevice>/note040",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "MIDI Device",
                     "action": "Hit",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -40,7 +40,7 @@
                     "path": "<MidiDevice>/control001",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "MIDI Device",
                     "action": "Scale",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -48,5 +48,17 @@
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "MIDI Device",
+            "bindingGroup": "MIDI Device",
+            "devices": [
+                {
+                    "devicePath": "<MidiDevice>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
 }

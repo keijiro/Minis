@@ -441,7 +441,7 @@ MonoBehaviour:
     m_ActionId: ca322236-ae16-47ad-b9a5-f40ec222dc23
     m_ActionName: Actions/Scale
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: MIDI Device
   m_DefaultActionMap: 24017309-51fb-49d4-9888-52a3e74ae9c4
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
