@@ -13,14 +13,16 @@ namespace Minis
     {
         #region Public accessors
 
-        public ButtonControl GetNote(int index)
+        public int channel { get; private set; }
+
+        public ButtonControl GetNote(int noteNumber)
         {
-            return _notes[index];
+            return _notes[noteNumber];
         }
 
-        public AxisControl GetControl(int index)
+        public AxisControl GetControl(int controlNumber)
         {
-            return _controls[index];
+            return _controls[controlNumber];
         }
 
         #endregion
@@ -70,6 +72,12 @@ namespace Minis
                 _notes[i] = GetChildControl<ButtonControl>("note" + i.ToString("D3"));
                 _controls[i] = GetChildControl<AxisControl>("control" + i.ToString("D3"));
             }
+
+            // Retrieve the MIDI channel number
+            // Here is a quite dirty trick: Parse the last two characters in
+            // the product name and use it as its channel number.
+            var product = description.product;
+            channel = int.Parse(product.Substring(product.Length - 2));
         }
 
         public static MidiDevice current { get; private set; }
