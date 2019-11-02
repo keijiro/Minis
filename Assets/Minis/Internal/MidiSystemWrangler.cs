@@ -3,16 +3,17 @@ using UnityEngine.InputSystem.Layouts;
 using UnityEngine.LowLevel;
 using System.Linq;
 
-// A wrangler class that installs/uninstalls subsystems on play mode changes.
-
 namespace Minis
 {
+    //
+    // Wrangler class that installs/uninstalls MIDI subsystems on system events
+    //
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoad]
 #endif
-    sealed class SystemWrangler
+    sealed class MidiSystemWrangler
     {
-        #region Local objects and methods
+        #region Internal objects and methods
 
         static MidiDriver _driver;
 
@@ -57,7 +58,7 @@ namespace Minis
 
         // On Editor, use InitializeOnLoad and playModeStateChanged callback.
 
-        static SystemWrangler()
+        static MidiSystemWrangler()
         {
             RegisterLayout();
             InsertPlayerLoopSystem();

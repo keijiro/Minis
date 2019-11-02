@@ -1,30 +1,46 @@
+using UnityEngine.InputSystem.Layouts;
+using UnityEngine.InputSystem;
 using RtMidiDll = RtMidi.Unmanaged;
 
 namespace Minis
 {
     //
-    // High-level wrapper class for RtMini input object
+    // MIDI port class that manages an RtMidi input object and MIDI device
+    // objects bound with each MIDI channel found in the port.
     //
     unsafe sealed class MidiPort : System.IDisposable
     {
-        #region MIDI event delegates
+        #region Internal objects and methods
 
-        public delegate void NoteOnDelegate(byte channel, byte note, byte velocity);
-        public delegate void NoteOffDelegate(byte channel, byte note);
-        public delegate void ControlChangeDelegate(byte channel, byte number, byte value);
+        RtMidiDll.Wrapper* _rtmidi;
+        string _portName;
+        MidiDevice [] _channels = new MidiDevice[16];
 
-        public NoteOnDelegate OnNoteOn { get; set; }
-        public NoteOffDelegate OnNoteOff { get; set; }
-        public ControlChangeDelegate OnControlChange { get; set; }
+        // Get a device object bound with a specified channel.
+        // Create a new device if it doesn't exist.
+        MidiDevice GetChannelDevice(int channel)
+        {
+            if (_channels[channel] == null)
+            {
+                var desc = new InputDeviceDescription {
+                    interfaceName = "Minis",
+                    deviceClass = "MIDI",
+                    product = _portName + " Channel " + channel,
+                    capabilities = "{\"channel\":" + channel + "}"
+                };
+                _channels[channel] = (MidiDevice)InputSystem.AddDevice(desc);
+            }
+            return _channels[channel];
+        }
 
         #endregion
 
-        #region Wrapper implementation
+        #region Public methods
 
-        RtMidiDll.Wrapper* _rtmidi;
-
-        public MidiPort(int portNumber)
+        public MidiPort(int portNumber, string portName)
         {
+            _portName = portName;
+
             _rtmidi = RtMidiDll.InCreateDefault();
 
             if (_rtmidi == null || !_rtmidi->ok)
@@ -39,7 +55,6 @@ namespace Minis
         ~MidiPort()
         {
             if (_rtmidi == null || !_rtmidi->ok) return;
-
             RtMidiDll.InFree(_rtmidi);
         }
 
@@ -49,6 +64,9 @@ namespace Minis
 
             RtMidiDll.InFree(_rtmidi);
             _rtmidi = null;
+
+            foreach (var dev in _channels)
+                if (dev != null) InputSystem.RemoveDevice(dev);
 
             System.GC.SuppressFinalize(this);
         }
@@ -65,24 +83,17 @@ namespace Minis
                 var stamp = RtMidiDll.InGetMessage(_rtmidi, message, ref size);
                 if (size == 0) break;
 
-                var status = (byte)(message[0] >> 4);
-                var channel = (byte)(message[0] & 0xf);
+                var status = message[0] >> 4;
+                var channel = message[0] & 0xf;
 
-                if (status == 9)
-                {
-                    if (message[2] > 0)
-                        OnNoteOn(channel, message[1], message[2]);
-                    else
-                        OnNoteOff(channel, message[1]);
-                }
-                else if (status == 8)
-                {
-                    OnNoteOff(channel, message[1]);
-                }
+                var noteOff = (status == 8) || (status == 9 && message[2] == 0);
+
+                if (status == 9 && !noteOff)
+                    GetChannelDevice(channel).OnNoteOn(message[1], message[2]);
+                else if (noteOff)
+                    GetChannelDevice(channel).OnNoteOff(message[1]);
                 else if (status == 0xb)
-                {
-                    OnControlChange(channel, message[1], message[2]);
-                }
+                    GetChannelDevice(channel).OnControlChange(message[1], message[2]);
             }
         }
 
