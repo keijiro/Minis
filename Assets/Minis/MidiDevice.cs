@@ -3,9 +3,7 @@ using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.LowLevel;
 
-// MIDI device class driven by MidiJack plugin
-
-namespace MidiJack2
+namespace Minis
 {
     [InputControlLayout(
         stateType = typeof(MidiDeviceState),

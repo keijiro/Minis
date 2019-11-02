@@ -6,7 +6,7 @@ using UnityEngine.InputSystem.Utilities;
 
 // Generic MIDI state struct with 128 notes and 128 controls
 
-namespace MidiJack2
+namespace Minis
 {
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct MidiDeviceState : IInputStateTypeInfo

@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 // MIDI device driver class
 
-namespace MidiJack2
+namespace Minis
 {
     sealed class MidiPortBinder : System.IDisposable
     {
-        MidiInputPort _port;
+        MidiPort _port;
         string _name;
         MidiDevice[] _channels = new MidiDevice[16];
 
-        public MidiPortBinder(MidiInputPort port, string name)
+        public MidiPortBinder(MidiPort port, string name)
         {
             _port = port;
             _name = name;
@@ -33,14 +33,14 @@ namespace MidiJack2
                 if (dev != null) InputSystem.RemoveDevice(dev);
         }
 
-        public void ProcessMessages() => _port.ProcessMessages();
+        public void ProcessMessages() => _port.ProcessMessageQueue();
 
         MidiDevice GetChannelDevice(int channel)
         {
             if (_channels[channel] == null)
             {
                 var desc = new InputDeviceDescription {
-                    interfaceName = "MidiJack2",
+                    interfaceName = "Minis",
                     deviceClass = "MIDI",
                     product = _name + " Channel " + channel,
                     capabilities = "{\"channel\":" + channel + "}"
@@ -84,7 +84,7 @@ namespace MidiJack2
         {
             for (var i = 0; i < _probe.PortCount; i++)
             {
-                var port = new MidiInputPort(i);
+                var port = new MidiPort(i);
                 var name = _probe.GetPortName(i);
                 _ports.Add(new MidiPortBinder(port, name));
             }

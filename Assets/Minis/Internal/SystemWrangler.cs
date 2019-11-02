@@ -5,7 +5,7 @@ using System.Linq;
 
 // A wrangler class that installs/uninstalls subsystems on play mode changes.
 
-namespace MidiJack2
+namespace Minis
 {
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoad]
@@ -19,7 +19,7 @@ namespace MidiJack2
         static void RegisterLayout()
         {
             InputSystem.RegisterLayout<MidiDevice>(
-                matches: new InputDeviceMatcher().WithInterface("MidiJack2")
+                matches: new InputDeviceMatcher().WithInterface("Minis")
             );
         }
 
