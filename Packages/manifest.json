@@ -9,9 +9,8 @@
     }
   ],
   "dependencies": {
-    "jp.keijiro.rtmidi": "1.0.0",
     "com.unity.inputsystem": "1.0.0-preview.1",
-    "com.unity.timeline": "1.2.4",
+    "com.unity.timeline": "1.2.6",
     "com.unity.modules.director": "1.0.0",
     "com.unity.modules.particlesystem": "1.0.0",
     "com.unity.modules.physics2d": "1.0.0",
