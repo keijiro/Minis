@@ -56,32 +56,41 @@ namespace Minis
 
         #if UNITY_EDITOR
 
-        // On Editor, use InitializeOnLoad and playModeStateChanged callback.
+        //
+        // On Editor, we use InitializeOnLoad to install the subsystem. At the
+        // same time, we use AssemblyReloadEvents to temporarily disable the
+        // system to avoid issue #1192379.
+        // #FIXME This workaround should be removed when the issue is solved.
+        //
 
         static MidiSystemWrangler()
         {
             RegisterLayout();
             InsertPlayerLoopSystem();
-            UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeStateChange;
-        }
 
-        static void OnPlayModeStateChange(UnityEditor.PlayModeStateChange state)
-        {
-            if (state == UnityEditor.PlayModeStateChange.EnteredPlayMode)
-            {
-                _driver = _driver ?? new MidiDriver();
-            }
-            else if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
-            {
+            // We use not only PlayerLoopSystem but also the
+            // EditorApplication.update callback because the PlayerLoop events
+            // are not invoked in the edit mode.
+            UnityEditor.EditorApplication.update += () => _driver?.Update();
+
+            // Uninstall the driver on domain reload.
+            UnityEditor.AssemblyReloadEvents.beforeAssemblyReload += () => {
                 _driver?.Dispose();
                 _driver = null;
-            }
+            };
+
+            // Reinstall the driver after domain reload.
+            UnityEditor.AssemblyReloadEvents.afterAssemblyReload += () => {
+                _driver = _driver ?? new MidiDriver();
+            };
         }
 
         #else
 
-        // On Player, use RuntimeInitializeOnLoadMethod.
-        // We don't do anything about finalization. Just throw it out.
+        //
+        // On Player, we use RuntimeInitializeOnLoadMethod to install the
+        // subsystems. We don't do anything about finalization.
+        //
 
         [UnityEngine.RuntimeInitializeOnLoadMethod]
         static void Initialize()
