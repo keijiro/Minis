@@ -9,7 +9,7 @@
     }
   ],
   "dependencies": {
-    "jp.keijiro.midi-jack": "0.0.1",
+    "jp.keijiro.rtmidi": "1.0.0",
     "com.unity.inputsystem": "1.0.0-preview.1",
     "com.unity.timeline": "1.2.4",
     "com.unity.modules.director": "1.0.0",

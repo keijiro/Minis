@@ -38,21 +38,21 @@ namespace MidiJack2
 
         #region MIDI event receiver
 
-        public void OnNoteOn(int note, float velocity)
+        public void OnNoteOn(byte note, byte velocity)
         {
-            unsafe { _state.notes[note] = (byte)(velocity * 127); }
-            InputSystem.QueueDeltaStateEvent(_notes[note], (byte)(velocity * 127));
+            unsafe { _state.notes[note] = velocity; }
+            InputSystem.QueueDeltaStateEvent(_notes[note], velocity);
         }
 
-        public void OnNoteOff(int note)
+        public void OnNoteOff(byte note)
         {
             unsafe { _state.notes[note] = 0; }
             InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
         }
 
-        public void OnKnob(int knobNumber, float knobValue)
+        public void OnControlChange(byte number, byte value)
         {
-            unsafe { _state.controls[knobNumber] = (byte)(knobValue * 127); }
+            unsafe { _state.controls[number] = value; }
             _controlModified = true;
         }
 

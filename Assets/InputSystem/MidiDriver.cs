@@ -1,116 +1,99 @@
-using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Layouts;
-using MidiJack;
+using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
-// A wrangler class that installs/uninstalls MidiDevice on play mode changes.
+// MIDI device driver class
 
 namespace MidiJack2
 {
-#if UNITY_EDITOR
-    [UnityEditor.InitializeOnLoad]
-#endif
-    sealed class MidiDriver
+    sealed class MidiPortBinder : System.IDisposable
     {
-        #region System callbacks
+        MidiInputPort _port;
+        string _name;
+        MidiDevice[] _channels = new MidiDevice[16];
 
-        #if UNITY_EDITOR
-
-        // On Editor, use InitializeOnLoad and playModeStateChanged callback.
-
-        static MidiDriver()
+        public MidiPortBinder(MidiInputPort port, string name)
         {
-            RegisterLayout();
-            UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeStateChange;
+            _port = port;
+            _name = name;
+
+            _port.OnNoteOn = (byte channel, byte note, byte velocity) =>
+                GetChannelDevice((int)channel).OnNoteOn(note, velocity);
+
+            _port.OnNoteOff = (byte channel, byte note) =>
+                GetChannelDevice((int)channel).OnNoteOff(note);
+
+            _port.OnControlChange = (byte channel, byte number, byte value) =>
+                GetChannelDevice((int)channel).OnControlChange(number, value);
         }
 
-        static void OnPlayModeStateChange(UnityEditor.PlayModeStateChange state)
+        public void Dispose()
         {
-            if (state == UnityEditor.PlayModeStateChange.EnteredPlayMode)
-                SetMidiCallback();
-            else if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
-                RemoveDevices();
+            foreach (var dev in _channels)
+                if (dev != null) InputSystem.RemoveDevice(dev);
         }
 
-        #else
+        public void ProcessMessages() => _port.ProcessMessages();
 
-        // On Player, use RuntimeInitializeOnLoadMethod.
-        // We don't do anything about finalization. Just throw it out.
-
-        [UnityEngine.RuntimeInitializeOnLoadMethod]
-        static void Initialize()
+        MidiDevice GetChannelDevice(int channel)
         {
-            RegisterLayout();
-            SetMidiCallback();
-        }
-
-        #endif
-
-        #endregion
-
-        #region MIDI callbacks
-
-        static MidiDevice [] _devices = new MidiDevice[16];
-
-        static MidiDevice GetDevice(int channel)
-        {
-            if (_devices[channel] == null)
+            if (_channels[channel] == null)
             {
                 var desc = new InputDeviceDescription {
                     interfaceName = "MidiJack2",
                     deviceClass = "MIDI",
-                    product = "MIDI Device Channel " + channel,
+                    product = _name + " Channel " + channel,
                     capabilities = "{\"channel\":" + channel + "}"
                 };
 
-                _devices[channel] = (MidiDevice)InputSystem.AddDevice(desc);
+                _channels[channel] = (MidiDevice)InputSystem.AddDevice(desc);
             }
 
-            return _devices[channel];
+            return _channels[channel];
         }
+    }
 
-        static void SetMidiCallback()
+    sealed class MidiDriver : System.IDisposable
+    {
+        MidiProbe _probe;
+        List<MidiPortBinder> _ports = new List<MidiPortBinder>();
+
+        public void Update()
         {
-            MidiMaster.noteOnDelegate += OnNoteOn;
-            MidiMaster.noteOffDelegate += OnNoteOff;
-            MidiMaster.knobDelegate += OnKnob;
+            if (_probe == null) _probe = new MidiProbe();
+
+            if (_ports.Count != _probe.PortCount)
+            {
+                // Rescan
+                DisposePorts();
+                ScanPorts();
+            }
+
+            foreach (var p in _ports) p.ProcessMessages();
         }
 
-        static void OnNoteOn(MidiChannel channel, int note, float velocity)
+        public void Dispose()
         {
-            GetDevice((int)channel).OnNoteOn(note, velocity);
+            DisposePorts();
+
+            _probe?.Dispose();
+            _probe = null;
         }
 
-        static void OnNoteOff(MidiChannel channel, int note)
+        void ScanPorts()
         {
-            GetDevice((int)channel).OnNoteOff(note);
+            for (var i = 0; i < _probe.PortCount; i++)
+            {
+                var port = new MidiInputPort(i);
+                var name = _probe.GetPortName(i);
+                _ports.Add(new MidiPortBinder(port, name));
+            }
         }
 
-        static void OnKnob(MidiChannel channel, int knobNumber, float knobValue)
+        void DisposePorts()
         {
-            GetDevice((int)channel).OnKnob(knobNumber, knobValue);
+            foreach (var p in _ports) p.Dispose();
+            _ports.Clear();
         }
-
-        #endregion
-
-        #region Private methods
-
-        static void RegisterLayout()
-        {
-            InputSystem.RegisterLayout<MidiDevice>(
-                matches: new InputDeviceMatcher().WithInterface("MidiJack2")
-            );
-        }
-
-        static void RemoveDevices()
-        {
-            var stack = new System.Collections.Generic.Stack<InputDevice>();
-
-            foreach (var dev in InputSystem.devices)
-                if (dev is MidiDevice) stack.Push(dev);
-
-            while (stack.Count > 0) InputSystem.RemoveDevice(stack.Pop());
-        }
-
-        #endregion
     }
 }
