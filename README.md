@@ -67,8 +67,8 @@ control.
 
 ![gif](https://i.imgur.com/nFzQM2M.gif)
 
-**TIPS** - For some reason, the listener only react to notes with high velocity
-(higher than 63). You may have to press a key strongly.
+**TIPS** - For some reason, the listener only reacts to notes with high
+velocity (higher than 63). You may have to press a key strongly.
 
 The MIDI Notes are shown as button controls with names like "Note C4". These
 controls work as pressure sensitive buttons. The button value (pressure) is
