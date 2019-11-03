@@ -4,7 +4,7 @@
   "description": "Minis: MIDI Input plugin for Unity New Input System",
   "displayName": "Minis",
   "keywords": [ "unity" ],
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "Unlicense",
   "name": "jp.keijiro.minis",
   "repository": "github:keijiro/Minis",
   "unity": "2019.3",
