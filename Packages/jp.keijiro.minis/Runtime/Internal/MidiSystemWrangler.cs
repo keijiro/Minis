@@ -19,6 +19,9 @@ namespace Minis
 
         static void RegisterLayout()
         {
+            InputSystem.RegisterLayout<MidiNoteControl>("MidiNote");
+            InputSystem.RegisterLayout<MidiValueControl>("MidiValue");
+
             InputSystem.RegisterLayout<MidiDevice>(
                 matches: new InputDeviceMatcher().WithInterface("Minis")
             );

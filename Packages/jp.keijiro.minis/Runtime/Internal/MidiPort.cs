@@ -89,11 +89,11 @@ namespace Minis
                 var noteOff = (status == 8) || (status == 9 && message[2] == 0);
 
                 if (status == 9 && !noteOff)
-                    GetChannelDevice(channel).OnNoteOn(message[1], message[2]);
+                    GetChannelDevice(channel).ProcessNoteOn(message[1], message[2]);
                 else if (noteOff)
-                    GetChannelDevice(channel).OnNoteOff(message[1]);
+                    GetChannelDevice(channel).ProcessNoteOff(message[1]);
                 else if (status == 0xb)
-                    GetChannelDevice(channel).OnControlChange(message[1], message[2]);
+                    GetChannelDevice(channel).ProcessControlChange(message[1], message[2]);
             }
         }
 
