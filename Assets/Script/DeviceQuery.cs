@@ -2,12 +2,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Layouts;
 
-// This example shows how to query a MIDI device with a product name or a
-// MIDI channel number.
+// DeviceQuery.cs - This script shows how to search MIDI devices by a pattern
+// matching with a product name and a channel number.
 
-sealed class DeviceQueryTest : MonoBehaviour
+sealed class DeviceQuery : MonoBehaviour
 {
-    // Search by a product name (regex available)
+    // Search by a product name (regex-able)
     [SerializeField] string _productName = null;
 
     // Search by a channel number
@@ -22,7 +22,7 @@ sealed class DeviceQueryTest : MonoBehaviour
         if (!string.IsNullOrEmpty(_productName))
             match = match.WithProduct(_productName);
 
-        // Channel number specifier using capability match
+        // Channel number specifier with a capability match
         if (_channel >= 0 && _channel < 16)
             match = match.WithCapability("channel", _channel);
 

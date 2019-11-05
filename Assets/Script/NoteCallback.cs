@@ -2,9 +2,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Layouts;
 
-// This example shows how to receive MIDI events via device delegates.
+// NoteCallback.cs - This script shows how to define a callback to get notified
+// on MIDI note-on/off events.
 
-sealed class DeviceDelegatesTest : MonoBehaviour
+sealed class NoteCallback : MonoBehaviour
 {
     void Start()
     {
@@ -16,6 +17,11 @@ sealed class DeviceDelegatesTest : MonoBehaviour
             if (midiDevice == null) return;
 
             midiDevice.onWillNoteOn += (note, velocity) => {
+                // Note that you can't use note.velocity because the state
+                // hasn't been updated yet (as this is "will" event). The note
+                // object is only useful to specify the target note (note
+                // number, channel number, device name, etc.) Use the velocity
+                // argument as an input note velocity.
                 Debug.Log(string.Format(
                     "Note On #{0} ({1}) vel:{2:0.00} ch:{3} dev:'{4}'",
                     note.noteNumber,

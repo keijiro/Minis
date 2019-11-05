@@ -2,9 +2,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Layouts;
 
-// This example shows how to detect MIDI device addition/removal.
+// DeviceCallback.cs - This script shows how to define a callback to get
+// notified on MIDI device additions and removals.
 
-sealed class DeviceDetectTest : MonoBehaviour
+sealed class DeviceCallback : MonoBehaviour
 {
     void Start()
     {
