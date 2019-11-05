@@ -2,9 +2,9 @@ Minis: MIDI Input for New Input System
 ======================================
 
 **Minis** (MIDI Input for New Input System) is a Unity plugin that adds MIDI
-input device support to [Unity new Input System].
+input device support to [Unity's new Input System].
 
-[Unity new Input System]:
+[Unity's new Input System]:
   https://blogs.unity3d.com/2019/10/14/introducing-the-new-input-system/
 
 System Requirements
@@ -18,8 +18,8 @@ On Linux, ALSA (libasound2) must be installed on the system.
 How To Install
 --------------
 
-This package uses the [scoped registry] feature to import dependent packages.
-Please add the following sections to the package manifest file
+This package uses the [scoped registry] feature to resolve package
+dependencies. Please add the following sections to the package manifest file
 (`Packages/manifest.json`).
 
 To the `scopedRegistries` section:
@@ -62,19 +62,19 @@ How To Use
 ### Input Controls
 
 When Minis is installed to a project, MIDI control elements appear under
-"Other" > "MIDI Device". You can also use the "Listen" button to specify a
+"Other" > "MIDI Device". You can also use the "Listen" button to select a
 control.
 
 ![gif](https://i.imgur.com/nFzQM2M.gif)
 
-**TIPS** - For some reason, the listener only reacts to notes with high
-velocity (higher than 63). You may have to press a key strongly.
+**TIPS** - There is a small known issue where the listener only reacts to notes
+with high velocity (higher than 63). You may have to press a key strongly.
 
 The MIDI Notes are shown as button controls with names like "Note C4". These
-controls work as pressure sensitive buttons. The button value (pressure) is
-set based on the velocity of the note.
+controls work as pressure-sensitive buttons. These button values are normalized
+as values between 0.0 to 1.0.
 
-MIDI Controls (CC) are shown as axis controls with names like "Control 10".
+The MIDI Controls (CC) are shown as axis controls with names like "Control 10".
 These axis values are normalized as values between 0.0 to 1.0.
 
 For further usage of the new Input System, please see the [Input System manual].
@@ -88,17 +88,26 @@ Minis treats each MIDI channel as an individual device. MIDI devices are
 dynamically added to the Input System when it detects a MIDI message from a
 new channel.
 
+**TIPS** - It means that the Input System can't detect a MIDI device until it
+sends a message. You may have to prompt the user to press a key to activate the
+device.
+
 When multiple MIDI interfaces are connected to the system, channels under these
 interfaces are also treated as individual devices. For instance, if you have
-connected two MIDI interfaces to the system, you can use up to 32 input devices
+connected two MIDI interfaces to a computer, you can use up to 32 input devices
 at the same time (as each interface can handle up to 16 channels).
 
-### Scripting Examples
+Scripting Examples
+------------------
 
-This repository contains some examples showing how to use Minis from a script.
+This repository contains some examples showing how to use Minis from C# scripts.
 
-[**DeviceDetectTest.cs**](Assets/Test/DeviceDetectTest.cs) - Get callback when
-a new MIDI device is detected.
+[**DeviceCallback.cs**](Assets/Script/DeviceCallback.cs) - This script shows
+how to define a callback to get notified on MIDI device additions and removals.
 
-[**DeviceQueryTest.cs**](Assets/Test/DeviceQueryTest.cs) - Search MIDI devices
-with a product name and a channel number.
+[**DeviceQuery.cs**](Assets/Script/DeviceQuery.cs) - This script shows how to
+search MIDI devices by a pattern matching with a product name and a channel
+number.
+
+[**NoteCallback.cs**](Assets/Script/NoteCallback.cs) - This script shows how to
+define a callback to get notified on MIDI note-on/off events.
