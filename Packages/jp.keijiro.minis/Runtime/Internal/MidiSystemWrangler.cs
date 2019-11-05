@@ -34,6 +34,7 @@ namespace Minis
         static void InsertPlayerLoopSystem()
         {
             var customSystem = new PlayerLoopSystem() {
+                type = typeof(MidiSystemWrangler),
                 updateDelegate = () => _driver?.Update()
             };
 

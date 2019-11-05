@@ -14,7 +14,7 @@ namespace Minis
         stateType = typeof(MidiDeviceState),
         displayName = "MIDI Device"
     )]
-    public sealed class MidiDevice : InputDevice, IInputUpdateCallbackReceiver
+    public sealed class MidiDevice : InputDevice
     {
         #region Public accessors
 
@@ -71,9 +71,6 @@ namespace Minis
         MidiNoteControl [] _notes;
         MidiValueControl [] _controls;
 
-        MidiDeviceState _state;
-        bool _controlModified;
-
         List<Action<MidiNoteControl, float>> _willNoteOnActions;
         List<Action<MidiNoteControl>> _willNoteOffActions;
 
@@ -83,11 +80,6 @@ namespace Minis
 
         internal void ProcessNoteOn(byte note, byte velocity)
         {
-            // We use a delta state event to update the note state, but it may
-            // be overwritten by a state event called in OnUpdate, so we also
-            // have to update the _state object.
-            unsafe { _state.notes[note] = velocity; }
-
             // Update state with a delta event.
             InputSystem.QueueDeltaStateEvent(_notes[note], velocity);
 
@@ -100,11 +92,6 @@ namespace Minis
 
         internal void ProcessNoteOff(byte note)
         {
-            // We use a delta state event to update the note state, but it may
-            // be overwritten by a state event called in OnUpdate, so we also
-            // have to update the _state object.
-            unsafe { _state.notes[note] = 0; }
-
             // Update state with a delta event.
             InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
 
@@ -116,12 +103,8 @@ namespace Minis
 
         internal void ProcessControlChange(byte number, byte value)
         {
-            // We wouldn't like to queue a delta event for every CC event
-            // because it may be happened quite frequently and could waste
-            // much CPU time. So we only record the last values in the device
-            // state struct, then queue a single state event in OnUpdate.
-            unsafe { _state.controls[number] = value; }
-            _controlModified = true;
+            // Update state with a delta event.
+            InputSystem.QueueDeltaStateEvent(_controls[number], value);
         }
 
         #endregion
@@ -161,20 +144,6 @@ namespace Minis
         {
             base.OnRemoved();
             if (current == this) current = null;
-        }
-
-        #endregion
-
-        #region IInputUpdateCallbackReceiver implementation
-
-        public void OnUpdate()
-        {
-            // Queue a state event if any control is modified during the frame.
-            if (_controlModified)
-            {
-                InputSystem.QueueStateEvent(this, _state);
-                _controlModified = false;
-            }
         }
 
         #endregion
