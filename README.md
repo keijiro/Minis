@@ -1,6 +1,8 @@
 Minis: MIDI Input for New Input System
 ======================================
 
+![gif](https://i.imgur.com/HdYn5mr.gif)
+
 **Minis** (MIDI Input for New Input System) is a Unity plugin that adds MIDI
 input device support to [Unity's new Input System].
 
