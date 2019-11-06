@@ -1,0 +1,6 @@
+Minis uses RtMidi as a MIDI device backend. RtMidi is distributed under an MIT
+style license. See the following repository for details.
+
+https://github.com/keijiro/jp.keijiro.rtmidi
+
+The other components in this repository are put under the public domain.
