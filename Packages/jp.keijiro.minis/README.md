@@ -1,8 +1,8 @@
 Minis: MIDI Input for New Input System
 ======================================
 
-![gif](https://i.imgur.com/BY7Pg6r.gif)
-![gif](https://i.imgur.com/HdYn5mr.gif)
+![gif](https://i.imgur.com/xo9BgV4.gif)
+![gif](https://i.imgur.com/UFqQcEz.gif)
 
 **Minis** (MIDI Input for New Input System) is a Unity plugin that adds MIDI
 input device support to [Unity's new Input System].
@@ -22,8 +22,10 @@ How To Install
 --------------
 
 This package uses the [scoped registry] feature to resolve package
-dependencies. Please add the following sections to the package manifest file
-(`Packages/manifest.json`).
+dependencies. Please add the following sections to the manifest file
+(Packages/manifest.json).
+
+[scoped registry]: https://docs.unity3d.com/Manual/upm-scoped.html
 
 To the `scopedRegistries` section:
 
@@ -38,7 +40,7 @@ To the `scopedRegistries` section:
 To the `dependencies` section:
 
 ```
-"jp.keijiro.minis": "1.0.1"
+"jp.keijiro.minis": "1.0.3"
 ```
 
 After changes, the manifest file should look like below:
@@ -53,11 +55,9 @@ After changes, the manifest file should look like below:
     }
   ],
   "dependencies": {
-    "jp.keijiro.minis": "1.0.1",
+    "jp.keijiro.minis": "1.0.3",
     ...
 ```
-
-[scoped registry]: https://docs.unity3d.com/Manual/upm-scoped.html
 
 How To Use
 ----------
@@ -114,3 +114,14 @@ number.
 
 [**NoteCallback.cs**](Assets/Script/NoteCallback.cs) - This script shows how to
 define a callback to get notified on MIDI note-on/off events.
+
+Frequently Asked Questions
+--------------------------
+
+#### Does it support MIDI out?
+
+No, but the backend (RtMidi) supports MIDI out. You can use the output
+functionality by directly accessing it. Please check the [RtMidi for Unity]
+repository that contains a MIDI out sample script.
+
+[RtMidi for Unity]: https://github.com/keijiro/jp.keijiro.rtmidi
