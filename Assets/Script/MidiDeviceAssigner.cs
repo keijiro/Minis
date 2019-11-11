@@ -8,7 +8,7 @@ namespace Minis
     // MIDI device assigner class that pairs a PlayerInput with a MIDI device
     //
     [RequireComponent(typeof(PlayerInput))]
-    public sealed class MidiDeviceAssign : MonoBehaviour
+    public sealed class MidiDeviceAssigner : MonoBehaviour
     {
         [SerializeField] int _channel = -1;
         [SerializeField] string _productName = null;
