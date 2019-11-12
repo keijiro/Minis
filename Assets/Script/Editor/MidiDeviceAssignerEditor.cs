@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Minis
 {
+    //
+    // Custom inspector for MidiDeviceAssigner
+    //
     [CustomEditor(typeof(MidiDeviceAssigner)), CanEditMultipleObjects]
     sealed class MidiDeviceAssignerEditor : Editor
     {
@@ -13,7 +16,7 @@ namespace Minis
         static class Channel
         {
             public static readonly GUIContent [] Labels = (new [] {
-                "All", "1", "2", "3", "4", "5", "6", "7", "8",
+                "Any", "1", "2", "3", "4", "5", "6", "7", "8",
                 "9", "10", "11", "12", "13", "14", "15", "16i"
             }).Select(s => new GUIContent(s)).ToArray();
 
@@ -33,6 +36,12 @@ namespace Minis
 
             EditorGUILayout.IntPopup(_channel, Channel.Labels, Channel.Numbers);
             EditorGUILayout.PropertyField(_productName);
+
+            EditorGUILayout.HelpBox(
+                "Assigns a device whose name contains the string above "+
+                "(case sensitive.) Keep empty to accept any product.",
+                MessageType.None
+            );
 
             serializedObject.ApplyModifiedProperties();
         }
