@@ -40,7 +40,7 @@ To the `scopedRegistries` section:
 To the `dependencies` section:
 
 ```
-"jp.keijiro.minis": "1.0.3"
+"jp.keijiro.minis": "1.0.4"
 ```
 
 After changes, the manifest file should look like below:
@@ -55,7 +55,7 @@ After changes, the manifest file should look like below:
     }
   ],
   "dependencies": {
-    "jp.keijiro.minis": "1.0.3",
+    "jp.keijiro.minis": "1.0.4",
     ...
 ```
 
@@ -99,6 +99,15 @@ When multiple MIDI interfaces are connected to the system, channels under these
 interfaces are also treated as individual devices. For instance, if you have
 connected two MIDI interfaces to a computer, you can use up to 32 input devices
 at the same time (as each interface can handle up to 16 channels).
+
+### MIDI Device Assigner
+
+![inspector](https://i.imgur.com/xHkTuOgm.jpg)
+
+MIDI Device Assigner is a small utility that assigns a MIDI device to
+PlayerInput. You can specify a MIDI channel and a product name as a search
+condition. It assigns a found device to a PlayerInput instance that exists in
+the same GameObject.
 
 Scripting Examples
 ------------------
