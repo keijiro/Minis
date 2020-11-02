@@ -55,6 +55,20 @@ public sealed class MidiDevice : InputDevice
         remove => _willNoteOffActions.Remove(value);
     }
 
+    // Will-control-change event
+    //
+    // The input system fires this event before processing a CC message on this
+    // device instance. It gives a target CC object and a control value as
+    // event arguments. Note that the MidiNoteControl hasn't been updated at
+    // this point.
+    public event Action<MidiValueControl, float> onWillControlChange
+    {
+        // Action list lazy allocation
+        add => (_willControlChangeActions = _willControlChangeActions ??
+                new List<Action<MidiValueControl, float>>()).Add(value);
+        remove => _willControlChangeActions.Remove(value);
+    }
+
     #endregion
 
     #region Internal objects
@@ -64,6 +78,7 @@ public sealed class MidiDevice : InputDevice
 
     List<Action<MidiNoteControl, float>> _willNoteOnActions;
     List<Action<MidiNoteControl>> _willNoteOffActions;
+    List<Action<MidiValueControl, float>> _willControlChangeActions;
 
     #endregion
 
@@ -93,8 +108,16 @@ public sealed class MidiDevice : InputDevice
     }
 
     internal void ProcessControlChange(byte number, byte value)
-      // State update with a delta event
-      => InputSystem.QueueDeltaStateEvent(_controls[number], value);
+    {
+        // State update with a delta event
+        InputSystem.QueueDeltaStateEvent(_controls[number], value);
+
+        // Control-change event invocation (only when it exists)
+        var fvalue = value / 127.0f;
+        if (_willControlChangeActions != null)
+            foreach (var action in _willControlChangeActions)
+                action(_controls[number], fvalue);
+    }
 
     #endregion
 
