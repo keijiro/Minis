@@ -2,7 +2,7 @@
   "dependencies": {
     "com.unity.inputsystem": {
       "version": "1.0.1",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -25,7 +25,7 @@
       "source": "embedded",
       "dependencies": {
         "jp.keijiro.rtmidi": "1.0.3",
-        "com.unity.inputsystem": "1.0.0"
+        "com.unity.inputsystem": "1.0.1"
       }
     },
     "jp.keijiro.rtmidi": {
