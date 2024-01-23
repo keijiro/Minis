@@ -76,6 +76,8 @@ public sealed class MidiDevice : InputDevice
     MidiNoteControl [] _notes;
     MidiValueControl [] _controls;
 
+    bool [] _activeNotes;
+
     List<Action<MidiNoteControl, float>> _willNoteOnActions;
     List<Action<MidiNoteControl>> _willNoteOffActions;
     List<Action<MidiValueControl, float>> _willControlChangeActions;
@@ -86,8 +88,13 @@ public sealed class MidiDevice : InputDevice
 
     internal void ProcessNoteOn(byte note, byte velocity)
     {
+        // Consecutive note ons need to have a note off inserted in-between
+        if (_activeNotes[note] && velocity > 0)
+            ProcessNoteOff(note);
+
         // State update with a delta event
         InputSystem.QueueDeltaStateEvent(_notes[note], velocity);
+        _activeNotes[note] = true;
 
         // Note-on event invocation (only when it exists)
         var fvelocity = velocity / 127.0f;
@@ -100,6 +107,7 @@ public sealed class MidiDevice : InputDevice
     {
         // State update with a delta event
         InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
+        _activeNotes[note] = false;
 
         // Note-off event invocation (only when it exists)
         if (_willNoteOffActions != null)
@@ -130,6 +138,7 @@ public sealed class MidiDevice : InputDevice
         // Populate the input controls.
         _notes = new MidiNoteControl[128];
         _controls = new MidiValueControl[128];
+        _activeNotes = new bool[128];
 
         for (var i = 0; i < 128; i++)
         {
