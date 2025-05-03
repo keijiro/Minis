@@ -9,7 +9,6 @@
     }
   ],
   "dependencies": {
-    "com.unity.timeline": "1.4.5",
-    "com.unity.modules.uielements": "1.0.0"
+    "com.unity.timeline": "1.8.8"
   }
 }
