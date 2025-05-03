@@ -1,6 +1,7 @@
+using System;
 using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem;
-using RtMidiDll = RtMidi.Unmanaged;
+using RtMidi;
 
 namespace Minis
 {
@@ -12,7 +13,7 @@ namespace Minis
     {
         #region Internal objects and methods
 
-        RtMidiDll.Wrapper* _rtmidi;
+        MidiIn _rtmidi;
         string _portName;
         MidiDevice [] _channels = new MidiDevice[16];
 
@@ -40,29 +41,16 @@ namespace Minis
         public MidiPort(int portNumber, string portName)
         {
             _portName = portName;
-
-            _rtmidi = RtMidiDll.InCreateDefault();
-
-            if (_rtmidi == null || !_rtmidi->ok)
-            {
-                UnityEngine.Debug.LogWarning("Failed to create an RtMidi device object.");
-                return;
-            }
-
-            RtMidiDll.OpenPort(_rtmidi, (uint)portNumber, "RtMidi Input");
+            _rtmidi = MidiIn.Create();
+            _rtmidi.OpenPort(portNumber);
         }
 
         ~MidiPort()
-        {
-            if (_rtmidi == null || !_rtmidi->ok) return;
-            RtMidiDll.InFree(_rtmidi);
-        }
+          => _rtmidi?.Dispose();
 
         public void Dispose()
         {
-            if (_rtmidi == null || !_rtmidi->ok) return;
-
-            RtMidiDll.InFree(_rtmidi);
+            _rtmidi?.Dispose();
             _rtmidi = null;
 
             foreach (var dev in _channels)
@@ -73,15 +61,15 @@ namespace Minis
 
         public void ProcessMessageQueue()
         {
-            if (_rtmidi == null || !_rtmidi->ok) return;
+            if (_rtmidi == null || !_rtmidi.IsOk) return;
+
+            var buffer = (Span<byte>)(stackalloc byte[32]);
+            double time;
 
             while (true)
             {
-                var size = 4ul;
-                var message = stackalloc byte [(int)size];
-
-                var stamp = RtMidiDll.InGetMessage(_rtmidi, message, ref size);
-                if (size != 3) break;
+                var message = _rtmidi.GetMessage(buffer, out time);
+                if (message.Length == 0) break;
 
                 var status = message[0] >> 4;
                 var channel = message[0] & 0xf;

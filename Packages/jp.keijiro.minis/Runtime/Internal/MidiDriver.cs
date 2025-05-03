@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RtMidi;
 
 namespace Minis
 {
@@ -10,7 +11,7 @@ namespace Minis
     {
         #region Internal objects and methods
 
-        MidiProbe _probe;
+        MidiIn _probe;
         List<MidiPort> _ports = new List<MidiPort>();
 
         void ScanPorts()
@@ -31,7 +32,7 @@ namespace Minis
 
         public void Update()
         {
-            if (_probe == null) _probe = new MidiProbe();
+            if (_probe == null) _probe = MidiIn.Create();
 
             // Rescan the ports if the count of the ports doesn't match.
             if (_ports.Count != _probe.PortCount)
