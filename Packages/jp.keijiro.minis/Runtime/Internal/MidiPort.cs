@@ -70,6 +70,7 @@ namespace Minis
             {
                 var message = _rtmidi.GetMessage(buffer, out time);
                 if (message.Length == 0) break;
+                if (message.Length != 3) continue;
 
                 var status = message[0] >> 4;
                 var channel = message[0] & 0xf;
