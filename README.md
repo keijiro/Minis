@@ -1,4 +1,4 @@
-# Minis: MIDI Input for New Input System
+# Minis: MIDI Input Extension for Unity Input System
 
 ![gif](https://i.imgur.com/xo9BgV4.gif)
 ![gif](https://i.imgur.com/UFqQcEz.gif)
