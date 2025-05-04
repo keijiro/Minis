@@ -1,136 +1,97 @@
-Minis: MIDI Input for New Input System
-======================================
+# Minis: MIDI Input for New Input System
 
 ![gif](https://i.imgur.com/xo9BgV4.gif)
 ![gif](https://i.imgur.com/UFqQcEz.gif)
 
-**Minis** (MIDI Input for New Input System) is a Unity plugin that adds MIDI
-input device support to [Unity's new Input System].
+**Minis** is an extension for the Unity [Input System] that adds support for
+MIDI input devices.
 
-[Unity's new Input System]:
-  https://blogs.unity3d.com/2019/10/14/introducing-the-new-input-system/
+[Input System]:
+  https://docs.unity3d.com/Packages/com.unity.inputsystem@latest/
 
-System Requirements
--------------------
+## System Requirements
 
-- Unity 2019.3 or later
-- 64-bit desktop platforms (Windows, macOS, Linux)
+- Unity 2022.3 LTS or later
 
-On Linux, ALSA (libasound2) must be installed on the system.
+Currently, RtMidi for Unity supports the following platform and architecture
+combinations:
 
-How To Install
---------------
+- Windows: x86_64
+- macOS: arm64 (Apple Silicon)
+- iOS: arm64
+- Linux: x86_64
+- Android: arm64
 
-This package uses the [scoped registry] feature to resolve package
-dependencies. Please add the following sections to the manifest file
-(Packages/manifest.json).
+## Installation
 
-[scoped registry]: https://docs.unity3d.com/Manual/upm-scoped.html
+You can install the Minis package (`jp.keijiro.minis`) via the "Keijiro" scoped
+registry using the Unity Package Manager. To add the registry to your project,
+follow [these instructions].
 
-To the `scopedRegistries` section:
+[these instructions]:
+  https://gist.github.com/keijiro/f8c7e8ff29bfe63d86b888901b82644c
 
-```
-{
-  "name": "Keijiro",
-  "url": "https://registry.npmjs.com",
-  "scopes": [ "jp.keijiro" ]
-}
-```
-
-To the `dependencies` section:
-
-```
-"jp.keijiro.minis": "1.0.10"
-```
-
-After changes, the manifest file should look like below:
-
-```
-{
-  "scopedRegistries": [
-    {
-      "name": "Keijiro",
-      "url": "https://registry.npmjs.com",
-      "scopes": [ "jp.keijiro" ]
-    }
-  ],
-  "dependencies": {
-    "jp.keijiro.minis": "1.0.10",
-    ...
-```
-
-How To Use
-----------
+## Usage
 
 ### Input Controls
 
-When Minis is installed to a project, MIDI control elements appear under
-"Other" > "MIDI Device". You can also use the "Listen" button to select a
-control.
+After installing Minis, MIDI control elements appear under
+"Other" > "MIDI Device" in the Input System. You can also use the "Listen"
+button to detect a specific control input.
 
 ![gif](https://i.imgur.com/nFzQM2M.gif)
 
-**TIPS** - There is a small known issue where the listener only reacts to notes
-with high velocity (higher than 63). You may have to press a key strongly.
+**NOTE** – The listener only reacts to notes with a velocity higher than 63.
+You may need to press the key firmly to trigger detection.
 
-The MIDI Notes are shown as button controls with names like "Note C4". These
-controls work as pressure-sensitive buttons. These button values are normalized
-as values between 0.0 to 1.0.
+MIDI notes appear as button controls with names like "Note C4". These are
+pressure-sensitive and output values normalized between 0.0 and 1.0.
 
-The MIDI Controls (CC) are shown as axis controls with names like "Control 10".
-These axis values are normalized as values between 0.0 to 1.0.
+MIDI CC messages appear as axis controls with names like "Control 10", and also
+output normalized values between 0.0 and 1.0.
 
-For further usage of the new Input System, please see the [Input System manual].
-
-[Input System manual]:
-  https://docs.unity3d.com/Packages/com.unity.inputsystem@latest/
+For more details on using the new Input System, refer to the [Input System]
+manual.
 
 ### MIDI Channels
 
-Minis treats each MIDI channel as an individual device. MIDI devices are
-dynamically added to the Input System when it detects a MIDI message from a
-new channel.
+Minis treats each MIDI channel as a separate input device. Devices are
+dynamically registered when a MIDI message is received on a new channel.
 
-**TIPS** - It means that the Input System can't detect a MIDI device until it
-sends a message. You may have to prompt the user to press a key to activate the
-device.
+**TIP** – The Input System cannot detect a device until it receives a message.
+Prompt the user to move a control to activate detection.
 
-When multiple MIDI interfaces are connected to the system, channels under these
-interfaces are also treated as individual devices. For instance, if you have
-connected two MIDI interfaces to a computer, you can use up to 32 input devices
-at the same time (as each interface can handle up to 16 channels).
+When multiple MIDI interfaces are connected, channels across all interfaces are
+handled independently. For example, with two interfaces, you can use up to 32
+input devices (16 channels per interface).
 
 ### MIDI Device Assigner
 
 ![inspector](https://i.imgur.com/xHkTuOgm.jpg)
 
-MIDI Device Assigner is a small utility that assigns a MIDI device to
-PlayerInput. You can specify a MIDI channel and a product name as a search
-condition. It assigns a found device to a PlayerInput instance that exists in
-the same GameObject.
+The MIDI Device Assigner is a utility for binding MIDI devices to PlayerInput.
+You can specify a MIDI channel and product name as matching criteria. It
+assigns the matched device to a PlayerInput component on the same GameObject.
 
-Scripting Examples
-------------------
+## Scripting Samples
 
-This repository contains some examples showing how to use Minis from C# scripts.
+This repository includes C# scripting examples demonstrating how to use Minis.
 
-[**DeviceCallback.cs**](Assets/Script/DeviceCallback.cs) - This script shows
-how to define a callback to get notified on MIDI device additions and removals.
+[**DeviceCallback.cs**](Assets/Script/DeviceCallback.cs) – Defines a callback
+for MIDI device additions and removals.
 
-[**DeviceQuery.cs**](Assets/Script/DeviceQuery.cs) - This script shows how to
-search MIDI devices by a pattern matching with a product name and a channel
-number.
+[**DeviceQuery.cs**](Assets/Script/DeviceQuery.cs) – Demonstrates searching for
+MIDI devices using product name and channel filters.
 
-[**NoteCallback.cs**](Assets/Script/NoteCallback.cs) - This script shows how to
-define a callback to get notified on MIDI note-on/off events.
+[**NoteCallback.cs**](Assets/Script/NoteCallback.cs) – Defines a callback for
+receiving MIDI note-on and note-off events.
 
-Frequently Asked Questions
---------------------------
+## Frequently Asked Questions
 
 #### Does it support MIDI out?
 
-No, but the backend (RtMidi) supports MIDI out. You can use the output
-functionality by directly accessing it. Please check the [RtMidi for Unity]
-repository that contains a MIDI out sample script.
+No, but the underlying backend (RtMidi) does support MIDI output. You can
+access this functionality directly. See the [RtMidi for Unity] repository for
+sample scripts.
 
 [RtMidi for Unity]: https://github.com/keijiro/jp.keijiro.rtmidi
