@@ -13,6 +13,7 @@
         "macOSStandalone",
         "tvOS",
         "VisionOS",
+        "WebGL",
         "WindowsStandalone64"
     ],
     "excludePlatforms": [],

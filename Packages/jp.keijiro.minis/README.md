@@ -21,6 +21,9 @@ combinations:
 - iOS: arm64
 - Linux: x86_64
 - Android: arm64
+- Web (requires [Web MIDI] support)
+
+[Web MIDI]: https://caniuse.com/midi
 
 ## Installation
 
