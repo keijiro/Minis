@@ -1,7 +1,7 @@
 # Minis: MIDI Input Extension for Unity Input System
 
-![gif](https://i.imgur.com/xo9BgV4.gif)
-![gif](https://i.imgur.com/UFqQcEz.gif)
+![gif](https://github.com/user-attachments/assets/fdbfaeed-5f92-46c8-8a0c-58de1083e494)
+![gif](https://github.com/user-attachments/assets/48f86c34-4afe-47a6-ba0d-18e53c9552d6)
 
 **Minis** is an extension for the Unity [Input System] that adds support for
 MIDI input devices.
