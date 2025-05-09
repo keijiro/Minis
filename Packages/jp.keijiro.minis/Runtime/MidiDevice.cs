@@ -86,6 +86,12 @@ public sealed class MidiDevice : InputDevice
 
     internal void ProcessNoteOn(byte note, byte velocity)
     {
+        // Force note-off before note-on
+        // The MIDI specification allows consecutive note-on messages. To
+        // handle this, we insert a dummy note-off before every note-on. This
+        // is ignored if the note is already off.
+        InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
+
         // State update with a delta event
         InputSystem.QueueDeltaStateEvent(_notes[note], velocity);
 
