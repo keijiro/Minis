@@ -85,6 +85,8 @@ namespace Minis
                     GetChannelDevice(channel).ProcessNoteOn(data1, data2);
                 else if (noteOff)
                     GetChannelDevice(channel).ProcessNoteOff(data1);
+                else if (status == 0xa)
+                    GetChannelDevice(channel).ProcessAftertouch(data1, data2);
                 else if (status == 0xb)
                     GetChannelDevice(channel).ProcessControlChange(data1, data2);
             }

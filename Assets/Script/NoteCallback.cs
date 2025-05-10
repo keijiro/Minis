@@ -41,6 +41,17 @@ sealed class NoteCallback : MonoBehaviour
                     note.device.description.product
                 ));
             };
+
+            midiDevice.onWillAftertouch += (note, pressure) => {
+                Debug.Log(string.Format(
+                    "Aftertouch #{0} ({1}) vel:{2:0.00} ch:{3} dev:'{4}'",
+                    note.noteNumber,
+                    note.shortDisplayName,
+                    pressure,
+                    (note.device as Minis.MidiDevice)?.channel,
+                    note.device.description.product
+                ));
+            };
         };
     }
 }

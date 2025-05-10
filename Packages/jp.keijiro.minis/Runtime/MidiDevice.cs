@@ -55,6 +55,20 @@ public sealed class MidiDevice : InputDevice
         remove => _willNoteOffActions.Remove(value);
     }
 
+    // Will-aftertouch event
+    //
+    // The input system fires this event before processing an aftertouch
+    // message on this device instance. It gives a target note and an input
+    // velocity as event arguments. Note that the MidiNoteControl hasn't been
+    // updated at this point.
+    public event Action<MidiNoteControl, float> onWillAftertouch
+    {
+        // Action list lazy allocation
+        add => (_willAftertouchActions = _willAftertouchActions ??
+                new List<Action<MidiNoteControl, float>>()).Add(value);
+        remove => _willAftertouchActions.Remove(value);
+    }
+
     // Will-control-change event
     //
     // The input system fires this event before processing a CC message on this
@@ -78,6 +92,7 @@ public sealed class MidiDevice : InputDevice
 
     List<Action<MidiNoteControl, float>> _willNoteOnActions;
     List<Action<MidiNoteControl>> _willNoteOffActions;
+    List<Action<MidiNoteControl, float>> _willAftertouchActions;
     List<Action<MidiValueControl, float>> _willControlChangeActions;
 
     #endregion
@@ -111,6 +126,18 @@ public sealed class MidiDevice : InputDevice
         if (_willNoteOffActions != null)
             foreach (var action in _willNoteOffActions)
                 action(_notes[note]);
+    }
+
+    internal void ProcessAftertouch(byte note, byte pressure)
+    {
+        // State update with a delta event
+        InputSystem.QueueDeltaStateEvent(_notes[note], pressure);
+
+        // Aftertouch event invocation (only when it exists)
+        var fpressure = pressure / 127.0f;
+        if (_willAftertouchActions != null)
+            foreach (var action in _willAftertouchActions)
+                action(_notes[note], fpressure);
     }
 
     internal void ProcessControlChange(byte number, byte value)
