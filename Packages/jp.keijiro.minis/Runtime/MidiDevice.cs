@@ -28,6 +28,10 @@ public sealed class MidiDevice : InputDevice
     public MidiValueControl GetControl(int controlNumber)
       => _controls[controlNumber];
 
+    // Get an input control object bound for pitch bend.
+    public MidiPitchBendControl GetPitchBend()
+      => _pitchBend;
+
     // Will-note-on event
     //
     // The input system fires this event before processing a note-on message on
@@ -83,17 +87,33 @@ public sealed class MidiDevice : InputDevice
         remove => _willControlChangeActions.Remove(value);
     }
 
+    // Will-pitch-bend event
+    //
+    // The input system fires this event before processing a pitch bend message
+    // on this device instance. It gives a target pitch bend object and a
+    // control value as event arguments. Note that the MidiPitchBendControl
+    // hasn't been updated at this point.
+    public event Action<MidiPitchBendControl, float> onWillPitchBend
+    {
+        // Action list lazy allocation
+        add => (_willPitchBendActions = _willPitchBendActions ??
+                new List<Action<MidiPitchBendControl, float>>()).Add(value);
+        remove => _willPitchBendActions.Remove(value);
+    }
+
     #endregion
 
     #region Internal objects
 
     MidiNoteControl [] _notes;
     MidiValueControl [] _controls;
+    MidiPitchBendControl _pitchBend;
 
     List<Action<MidiNoteControl, float>> _willNoteOnActions;
     List<Action<MidiNoteControl>> _willNoteOffActions;
     List<Action<MidiNoteControl, float>> _willAftertouchActions;
     List<Action<MidiValueControl, float>> _willControlChangeActions;
+    List<Action<MidiPitchBendControl, float>> _willPitchBendActions;
 
     #endregion
 
@@ -152,6 +172,21 @@ public sealed class MidiDevice : InputDevice
                 action(_controls[number], fvalue);
     }
 
+    internal void ProcessPitchBend(byte lo, byte hi)
+    {
+        // Combined 14-bit value
+        var value = (ushort)((hi << 7) + lo);
+
+        // State update with a delta event
+        InputSystem.QueueDeltaStateEvent(_pitchBend, value);
+
+        // Pitch-bend event invocation (only when it exists)
+        var fvalue = (float)(value - 0x2000) / 0x2000;
+        if (_willPitchBendActions != null)
+            foreach (var action in _willPitchBendActions)
+                action(_pitchBend, fvalue);
+    }
+
     #endregion
 
     #region InputDevice implementation
@@ -168,6 +203,7 @@ public sealed class MidiDevice : InputDevice
         {
             _notes[i] = GetChildControl<MidiNoteControl>("note" + i.ToString("D3"));
             _controls[i] = GetChildControl<MidiValueControl>("control" + i.ToString("D3"));
+            _pitchBend = GetChildControl<MidiPitchBendControl>("pitchbend");
         }
 
         // MIDI channel number determination

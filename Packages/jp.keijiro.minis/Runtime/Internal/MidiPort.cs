@@ -89,6 +89,8 @@ namespace Minis
                     GetChannelDevice(channel).ProcessAftertouch(data1, data2);
                 else if (status == 0xb)
                     GetChannelDevice(channel).ProcessControlChange(data1, data2);
+                else if (status == 0xe)
+                    GetChannelDevice(channel).ProcessPitchBend(data1, data2);
             }
         }
 
