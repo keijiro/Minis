@@ -274,7 +274,8 @@ namespace Minis
         [InputControl(name = "control127", displayName = "Control 127", shortDisplayName = "CC 127", layout = "MidiValue", offset = 255)]
         public fixed byte controls[128];
 
-        [InputControl(name = "pitchBend", displayName = "Pitch Bend", shortDisplayName = "P.Bend", layout= "MidiPitchBend", offset = 256)]
+        [InputControl(name = "pitchBend", displayName = "Pitch Bend", shortDisplayName = "P.Bend", layout= "Axis", offset = 256,
+                      format = "USHT", parameters = "normalize = true, normalizeMax = 0.25000381475, normalizeZero = 0.5")]
         public ushort pitchBend;
     }
 }

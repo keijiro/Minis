@@ -29,7 +29,7 @@ public sealed class MidiDevice : InputDevice
       => _controls[controlNumber];
 
     // Get an input control object bound for pitch bend.
-    public MidiPitchBendControl GetPitchBend()
+    public AxisControl GetPitchBend()
       => _pitchBend;
 
     // Will-note-on event
@@ -91,13 +91,13 @@ public sealed class MidiDevice : InputDevice
     //
     // The input system fires this event before processing a pitch bend message
     // on this device instance. It gives a target pitch bend object and a
-    // control value as event arguments. Note that the MidiPitchBendControl
-    // hasn't been updated at this point.
-    public event Action<MidiPitchBendControl, float> onWillPitchBend
+    // control value as event arguments. Note that the AxisControl hasn't been
+    // updated at this point.
+    public event Action<AxisControl, float> onWillPitchBend
     {
         // Action list lazy allocation
         add => (_willPitchBendActions = _willPitchBendActions ??
-                new List<Action<MidiPitchBendControl, float>>()).Add(value);
+                new List<Action<AxisControl, float>>()).Add(value);
         remove => _willPitchBendActions.Remove(value);
     }
 
@@ -107,13 +107,13 @@ public sealed class MidiDevice : InputDevice
 
     MidiNoteControl [] _notes;
     MidiValueControl [] _controls;
-    MidiPitchBendControl _pitchBend;
+    AxisControl _pitchBend;
 
     List<Action<MidiNoteControl, float>> _willNoteOnActions;
     List<Action<MidiNoteControl>> _willNoteOffActions;
     List<Action<MidiNoteControl, float>> _willAftertouchActions;
     List<Action<MidiValueControl, float>> _willControlChangeActions;
-    List<Action<MidiPitchBendControl, float>> _willPitchBendActions;
+    List<Action<AxisControl, float>> _willPitchBendActions;
 
     #endregion
 
@@ -203,7 +203,7 @@ public sealed class MidiDevice : InputDevice
         {
             _notes[i] = GetChildControl<MidiNoteControl>("note" + i.ToString("D3"));
             _controls[i] = GetChildControl<MidiValueControl>("control" + i.ToString("D3"));
-            _pitchBend = GetChildControl<MidiPitchBendControl>("pitchbend");
+            _pitchBend = GetChildControl<AxisControl>("pitchBend");
         }
 
         // MIDI channel number determination
