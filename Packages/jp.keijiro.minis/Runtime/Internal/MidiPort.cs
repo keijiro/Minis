@@ -70,27 +70,24 @@ namespace Minis
             {
                 var message = _rtmidi.GetMessage(buffer, out time);
                 if (message.Length == 0) break;
-                if (message.Length != 3) continue;
 
                 var status = message[0] >> 4;
                 var channel = message[0] & 0xf;
-                var data1 = message[1];
-                var data2 = message[2];
+                var device = GetChannelDevice(channel);
 
+                var data1 = message.Length > 1 ? message[1] : (byte)0;
+                var data2 = message.Length > 2 ? message[2] : (byte)0;
                 if (data1 > 0x7f || data2 > 0x7f) continue; // Invalid data
 
-                var noteOff = (status == 8) || (status == 9 && data2 == 0);
-
-                if (status == 9 && !noteOff)
-                    GetChannelDevice(channel).ProcessNoteOn(data1, data2);
-                else if (noteOff)
-                    GetChannelDevice(channel).ProcessNoteOff(data1);
-                else if (status == 0xa)
-                    GetChannelDevice(channel).ProcessAftertouch(data1, data2);
-                else if (status == 0xb)
-                    GetChannelDevice(channel).ProcessControlChange(data1, data2);
-                else if (status == 0xe)
-                    GetChannelDevice(channel).ProcessPitchBend(data1, data2);
+                switch (status)
+                {
+                    case 0x8: device.ProcessNoteOff(data1); break;
+                    case 0x9: device.ProcessNoteOn(data1, data2); break;
+                    case 0xa: device.ProcessAftertouch(data1, data2); break;
+                    case 0xb: device.ProcessControlChange(data1, data2); break;
+                    case 0xd: device.ProcessChannelPressure(data1); break;
+                    case 0xe: device.ProcessPitchBend(data1, data2); break;
+                }
             }
         }
 
