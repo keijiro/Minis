@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using RtMidi;
+using RtMidiIn = RtMidi.MidiIn;
 
 namespace Minis {
 
@@ -10,7 +10,7 @@ sealed class MidiDriver : System.IDisposable
 {
     #region Private objects and methods
 
-    MidiIn _probe;
+    RtMidiIn _probe;
     List<MidiPort> _ports = new List<MidiPort>();
 
     void OpenAllAvailablePorts()
@@ -31,7 +31,7 @@ sealed class MidiDriver : System.IDisposable
 
     public void Update()
     {
-        if (_probe == null) _probe = MidiIn.Create();
+        if (_probe == null) _probe = RtMidiIn.Create();
 
         // Port rescan triggered by port count mismatch
         if (_ports.Count != _probe.PortCount)
