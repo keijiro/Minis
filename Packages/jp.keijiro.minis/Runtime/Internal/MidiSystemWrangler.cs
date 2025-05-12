@@ -1,104 +1,99 @@
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Layouts;
 using UnityEngine.LowLevel;
-using System.Linq;
+using UnityEngine.PlayerLoop;
+using System;
 
-namespace Minis
-{
-    //
-    // Wrangler class that installs/uninstalls MIDI subsystems on system events
-    //
+namespace Minis {
+
+//
+// Wrangler class for installing and uninstalling MIDI subsystems in
+// response to system events
+//
 #if UNITY_EDITOR
-    [UnityEditor.InitializeOnLoad]
+[InitializeOnLoad]
 #endif
-    static class MidiSystemWrangler
+static class MidiSystemWrangler
+{
+    #region Private objects and methods
+
+    static MidiDriver _driver;
+
+    static void RegisterLayout()
     {
-        #region Internal objects and methods
-
-        static MidiDriver _driver;
-
-        static void RegisterLayout()
-        {
-            InputSystem.RegisterLayout<MidiNoteControl>("MidiNote");
-            InputSystem.RegisterLayout<MidiValueControl>("MidiValue");
-
-            InputSystem.RegisterLayout<MidiDevice>(
-                matches: new InputDeviceMatcher().WithInterface("Minis")
-            );
-        }
-
-        #endregion
-
-        #region PlayerLoopSystem implementation
-
-        static void InsertPlayerLoopSystem()
-        {
-            var customSystem = new PlayerLoopSystem() {
-                type = typeof(MidiSystemWrangler),
-                updateDelegate = () => _driver?.Update()
-            };
-
-            var playerLoop = PlayerLoop.GetCurrentPlayerLoop();
-
-            for (var i = 0; i < playerLoop.subSystemList.Length; i++)
-            {
-                ref var phase = ref playerLoop.subSystemList[i];
-                if (phase.type == typeof(UnityEngine.PlayerLoop.EarlyUpdate))
-                {
-                    phase.subSystemList =
-                        phase.subSystemList.Concat(new [] { customSystem }).ToArray();
-                    break;
-                }
-            }
-
-            PlayerLoop.SetPlayerLoop(playerLoop);
-        }
-
-        #endregion
-
-        #region System initialization/finalization callback
-
-        #if UNITY_EDITOR
-
-        //
-        // On Editor, we use InitializeOnLoad to install the subsystem.
-        //
-
-        static MidiSystemWrangler()
-        {
-            RegisterLayout();
-            InsertPlayerLoopSystem();
-            _driver = new MidiDriver();
-
-            // We use not only PlayerLoopSystem but also the
-            // EditorApplication.update callback because the PlayerLoop events
-            // are not invoked in the edit mode.
-            UnityEditor.EditorApplication.update += () => _driver?.Update();
-
-            // Uninstall the driver on domain reload.
-            UnityEditor.AssemblyReloadEvents.beforeAssemblyReload += () => {
-                _driver?.Dispose();
-                _driver = null;
-            };
-        }
-
-        #else
-
-        //
-        // On Player, we use RuntimeInitializeOnLoadMethod to install the
-        // subsystems. We don't do anything about finalization.
-        //
-
-        [UnityEngine.RuntimeInitializeOnLoadMethod]
-        static void Initialize()
-        {
-            RegisterLayout();
-            InsertPlayerLoopSystem();
-            _driver = new MidiDriver();
-        }
-
-        #endif
-
-        #endregion
+        InputSystem.RegisterLayout<MidiNoteControl>("MidiNote");
+        InputSystem.RegisterLayout<MidiValueControl>("MidiValue");
+        InputSystem.RegisterLayout<MidiDevice>
+          (matches: new InputDeviceMatcher().WithInterface("Minis"));
     }
+
+    static void InsertPlayerLoopSystem()
+    {
+        var loop = PlayerLoop.GetCurrentPlayerLoop();
+
+        for (var i = 0; i < loop.subSystemList.Length; i++) 
+        {
+            ref var subsys = ref loop.subSystemList[i];
+            if (subsys.type != typeof(EarlyUpdate)) continue;
+
+            var target = new PlayerLoopSystem 
+              { type = typeof(MidiSystemWrangler),
+                updateDelegate = () => _driver?.Update() };
+
+            var len = subsys.subSystemList.Length;
+            Array.Resize(ref subsys.subSystemList, len + 1);
+            subsys.subSystemList[len] = target;
+
+            PlayerLoop.SetPlayerLoop(loop);
+            return;
+        }
+
+        throw new InvalidOperationException
+          ("Can't find EarlyUpdate player sub system.");
+    }
+
+    #endregion
+
+    #region System event callback
+
+#if UNITY_EDITOR
+
+    // In the Editor, we use InitializeOnLoad (class attribute) to install the
+    // subsystem.
+
+    static MidiSystemWrangler()
+    {
+        RegisterLayout();
+        InsertPlayerLoopSystem();
+        _driver = new MidiDriver();
+
+        // We use not only PlayerLoopSystem but also EditorApplication.update,
+        // since PlayerLoop events are not invoked in Edit Mode.
+        EditorApplication.update += () => _driver?.Update();
+
+        // Uninstalls the driver on domain reload.
+        AssemblyReloadEvents.beforeAssemblyReload +=
+          () => { _driver?.Dispose(); _driver = null; };
+    }
+
+#else
+
+    // In the Player, we use RuntimeInitializeOnLoadMethod to install the
+    // subsystems. No explicit finalization is performed.
+
+    [RuntimeInitializeOnLoadMethod]
+    static void Initialize()
+    {
+        RegisterLayout();
+        InsertPlayerLoopSystem();
+        _driver = new MidiDriver();
+    }
+
+#endif
+
+    #endregion
 }
+
+} // namespace Minis
