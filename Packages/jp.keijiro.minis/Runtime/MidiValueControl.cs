@@ -1,22 +1,24 @@
-namespace Minis
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
+
+namespace Minis {
+
+//
+// Custom axis control for representing a MIDI control value (CC)
+//
+public class MidiValueControl : AxisControl
 {
-    //
-    // Custom control class for MIDI controls
-    //
-    public class MidiValueControl : UnityEngine.InputSystem.Controls.AxisControl
+    public MidiValueControl()
     {
-        public MidiValueControl()
-        {
-            m_StateBlock.format =
-                UnityEngine.InputSystem.LowLevel.InputStateBlock.FormatByte;
+        m_StateBlock.format = InputStateBlock.FormatByte;
 
-            // AxisControl parameters
-            normalize = true;
-            normalizeMax = 0.49803921568f;
-        }
-
-        // Calculate control number from offset
-        public int controlNumber { get { return (int)stateOffsetRelativeToDeviceRoot - 128; } }
+        // AxisControl parameters
+        normalize = true;
+        normalizeMax = 0.49803921568f;
     }
+
+    // MIDI control (CC) number
+    public int controlNumber => (int)stateOffsetRelativeToDeviceRoot - 128;
 }
 
+} // namespace Minis

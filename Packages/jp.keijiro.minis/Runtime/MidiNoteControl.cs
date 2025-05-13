@@ -1,27 +1,32 @@
-namespace Minis
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
+
+namespace Minis {
+
+//
+// Custom button control for representing a MIDI note
+//
+public class MidiNoteControl : ButtonControl
 {
-    //
-    // Custom control class for MIDI nots
-    //
-    public class MidiNoteControl : UnityEngine.InputSystem.Controls.ButtonControl
+    public MidiNoteControl()
     {
-        public MidiNoteControl()
-        {
-            m_StateBlock.format =
-                UnityEngine.InputSystem.LowLevel.InputStateBlock.FormatByte;
+        m_StateBlock.format = InputStateBlock.FormatByte;
 
-            // AxisControl parameters
-            normalize = true;
-            normalizeMax = 0.49803921568f;
+        // AxisControl parameters
+        normalize = true;
+        normalizeMax = 0.49803921568f;
 
-            // ButtonControl parameters
-            pressPoint = 1.0f / 127;
-        }
-
-        // Calculate note number from offset
-        public int noteNumber { get { return (int)stateOffsetRelativeToDeviceRoot; } }
-
-        // Current velocity value; Returns zero when key off.
-        public float velocity => ReadValue();
+        // ButtonControl parameters
+        pressPoint = 1.0f / 127;
     }
+
+    // MIDI note number
+    public int noteNumber => (int)stateOffsetRelativeToDeviceRoot;
+
+    // Current velocity value of the MIDI note
+    // Returns zero when the note is off. Supports polyphonic aftertouch.
+    // (Note: Channel pressure is not considered)
+    public float velocity => ReadValue();
 }
+
+} // namespace Minis
