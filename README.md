@@ -25,6 +25,18 @@ combinations:
 
 [Web MIDI]: https://caniuse.com/midi
 
+In addition, there are some platform-specific considerations to keep in mind:
+
+#### Android
+
+Minis currently does not support the GameActivity entry point. You must select
+"Activity" as the Application Entry Point in the Player Settings.
+
+#### Linux
+
+The RtMidi backend requires ALSA (`libasound2`) on Linux platforms. If Minis
+does not work, please check that ALSA is installed.
+
 ## Installation
 
 You can install the Minis package (`jp.keijiro.minis`) via the "Keijiro" scoped
