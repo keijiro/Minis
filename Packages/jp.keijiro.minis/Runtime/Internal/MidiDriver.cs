@@ -40,8 +40,8 @@ sealed class MidiDriver : System.IDisposable
             OpenAllAvailablePorts();
         }
 
-        // Queued MIDI message processing
-        foreach (var p in _ports) p.ProcessMessageQueue();
+        // Queued MIDI event processing
+        foreach (var p in _ports) p.ProcessEventQueue();
     }
 
     public void Dispose()

@@ -139,15 +139,8 @@ public sealed class MidiDevice : InputDevice
 
     #region MIDI event receiver (invoked from MidiPort)
 
-    internal void ProcessNoteOn(byte note, byte velocity)
+    internal void QueueNoteOn(byte note, byte velocity)
     {
-        // Special case: Zero velocity = Note-off
-        if (velocity == 0)
-        {
-            ProcessNoteOff(note);
-            return;
-        }
-
         // Force note-off before note-on
         // The MIDI specification allows consecutive note-on messages. To
         // handle this, we insert a dummy note-off before every note-on. This
@@ -156,6 +149,16 @@ public sealed class MidiDevice : InputDevice
 
         // State update with a delta event
         InputSystem.QueueDeltaStateEvent(_notes[note], velocity);
+    }
+
+    internal void InvokeNoteOn(byte note, byte velocity)
+    {
+        // Special case: Zero velocity = Note-off
+        if (velocity == 0)
+        {
+            InvokeNoteOff(note);
+            return;
+        }
 
         // Note-on event invocation (only when it exists)
         var fvelocity = velocity / 127.0f;
@@ -164,22 +167,22 @@ public sealed class MidiDevice : InputDevice
                 action(_notes[note], fvelocity);
     }
 
-    internal void ProcessNoteOff(byte note)
-    {
-        // State update with a delta event
-        InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
+    internal void QueueNoteOff(byte note)
+      => InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
 
+    internal void InvokeNoteOff(byte note)
+    {
         // Note-off event invocation (only when it exists)
         if (_willNoteOffActions != null)
             foreach (var action in _willNoteOffActions)
                 action(_notes[note]);
     }
 
-    internal void ProcessAftertouch(byte note, byte pressure)
-    {
-        // State update with a delta event
-        InputSystem.QueueDeltaStateEvent(_notes[note], pressure);
+    internal void QueueAftertouch(byte note, byte pressure)
+      => InputSystem.QueueDeltaStateEvent(_notes[note], pressure);
 
+    internal void InvokeAftertouch(byte note, byte pressure)
+    {
         // Aftertouch event invocation (only when it exists)
         var fpressure = pressure / 127.0f;
         if (_willAftertouchActions != null)
@@ -187,11 +190,11 @@ public sealed class MidiDevice : InputDevice
                 action(_notes[note], fpressure);
     }
 
-    internal void ProcessControlChange(byte number, byte value)
-    {
-        // State update with a delta event
-        InputSystem.QueueDeltaStateEvent(_controls[number], value);
+    internal void QueueControlChange(byte number, byte value)
+      => InputSystem.QueueDeltaStateEvent(_controls[number], value);
 
+    internal void InvokeControlChange(byte number, byte value)
+    {
         // Control-change event invocation (only when it exists)
         var fvalue = value / 127.0f;
         if (_willControlChangeActions != null)
@@ -199,11 +202,11 @@ public sealed class MidiDevice : InputDevice
                 action(_controls[number], fvalue);
     }
 
-    internal void ProcessChannelPressure(byte pressure)
-    {
-        // State update with a delta event
-        InputSystem.QueueDeltaStateEvent(_channelPressure, pressure);
+    internal void QueueChannelPressure(byte pressure)
+      => InputSystem.QueueDeltaStateEvent(_channelPressure, pressure);
 
+    internal void InvokeChannelPressure(byte pressure)
+    {
         // Channel-pressure event invocation (only when it exists)
         var fvalue = pressure / 127.0f;
         if (_willChannelPressureActions != null)
@@ -211,14 +214,11 @@ public sealed class MidiDevice : InputDevice
                 action(_channelPressure, fvalue);
     }
 
-    internal void ProcessPitchBend(byte lo, byte hi)
+    internal void QueuePitchBend(ushort value)
+      => InputSystem.QueueDeltaStateEvent(_pitchBend, value);
+
+    internal void InvokePitchBend(ushort value)
     {
-        // Combined 14-bit value
-        var value = (ushort)((hi << 7) + lo);
-
-        // State update with a delta event
-        InputSystem.QueueDeltaStateEvent(_pitchBend, value);
-
         // Pitch-bend event invocation (only when it exists)
         var fvalue = (float)(value - 0x2000) / 0x2000;
         if (_willPitchBendActions != null)
