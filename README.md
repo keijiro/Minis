@@ -32,6 +32,8 @@ In addition, there are some platform-specific considerations to keep in mind:
 Minis currently does not support the GameActivity entry point. You must select
 "Activity" as the Application Entry Point in the Player Settings.
 
+There is a known issue with multi-port MIDI devices. keijiro/jp.keijiro.rtmidi#16
+
 #### Linux
 
 The RtMidi backend requires ALSA (`libasound2`) on Linux platforms. If Minis
