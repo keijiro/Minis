@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
-using UnityEngine.InputSystem.LowLevel;
 
 namespace Minis {
 
 //
-// Custom input device class that processes input from a MIDI channel
+// Custom input device for representing a MIDI channel on a MIDI device
 //
 [InputControlLayout(stateType = typeof(MidiDeviceState), displayName = "MIDI Device")]
 public sealed class MidiDevice : InputDevice
@@ -16,115 +15,79 @@ public sealed class MidiDevice : InputDevice
     #region Public accessors
 
     // MIDI channel number
-    //
-    // The first channel returns 0.
+    // The first channel is 0. Note that it is labeled as "Channel 1" in the
+    // MIDI standard.
     public int channel { get; private set; }
 
-    // Get an input control object bound for a specific note.
+    // MIDI note control bound to the specified note number
     public MidiNoteControl GetNote(int noteNumber)
       => _notes[noteNumber];
 
-    // Get an input control object bound for a specific control element (CC).
+    // MIDI value control bound to the specified control element (CC)
     public MidiValueControl GetControl(int controlNumber)
       => _controls[controlNumber];
 
-    // Get an input control object bound for channel pressure.
-    public AxisControl GetChannelPressure()
+    // Axis control bound to the MIDI channel pressure
+    public AxisControl channelPressure
       => _channelPressure;
 
-    // Get an input control object bound for pitch bend.
-    public AxisControl GetPitchBend()
+    // Axis control bound to the MIDI pitch bend
+    public AxisControl pitchBend
       => _pitchBend;
 
+    // Will-event callbacks for incoming MIDI messages
+    // These events are triggered before the corresponding MIDI messages are
+    // processed. Control state is not updated at the time of invocation. Do
+    // not rely on control values; use the callback arguments instead.
+
     // Will-note-on event
-    //
-    // The input system fires this event before processing a note-on message on
-    // this device instance. It gives a target note and an input velocity as
-    // event arguments. Note that the MidiNoteControl hasn't been updated at
-    // this point.
     public event Action<MidiNoteControl, float> onWillNoteOn
     {
-        // Action list lazy allocation
-        add => (_willNoteOnActions = _willNoteOnActions ??
-                new List<Action<MidiNoteControl, float>>()).Add(value);
+        add => (_willNoteOnActions ??= new()).Add(value);
         remove => _willNoteOnActions.Remove(value);
     }
 
     // Will-note-off event
-    //
-    // The input system fires this event before processing a note-off message
-    // on this device instance. It gives a target note as an event argument.
-    // Note that the MidiNoteControl hasn't been updated at this point.
     public event Action<MidiNoteControl> onWillNoteOff
     {
-        // Action list lazy allocation
-        add => (_willNoteOffActions = _willNoteOffActions ??
-                new List<Action<MidiNoteControl>>()).Add(value);
+        add => (_willNoteOffActions ??= new()).Add(value);
         remove => _willNoteOffActions.Remove(value);
     }
 
     // Will-aftertouch event
-    //
-    // The input system fires this event before processing an aftertouch
-    // message on this device instance. It gives a target note and an input
-    // velocity as event arguments. Note that the MidiNoteControl hasn't been
-    // updated at this point.
     public event Action<MidiNoteControl, float> onWillAftertouch
     {
-        // Action list lazy allocation
-        add => (_willAftertouchActions = _willAftertouchActions ??
-                new List<Action<MidiNoteControl, float>>()).Add(value);
+        add => (_willAftertouchActions ??= new()).Add(value);
         remove => _willAftertouchActions.Remove(value);
     }
 
     // Will-control-change event
-    //
-    // The input system fires this event before processing a CC message on this
-    // device instance. It gives a target CC object and a control value as
-    // event arguments. Note that the MidiNoteControl hasn't been updated at
-    // this point.
     public event Action<MidiValueControl, float> onWillControlChange
     {
-        // Action list lazy allocation
-        add => (_willControlChangeActions = _willControlChangeActions ??
-                new List<Action<MidiValueControl, float>>()).Add(value);
+        add => (_willControlChangeActions ??= new()).Add(value);
         remove => _willControlChangeActions.Remove(value);
     }
 
     // Will-channel-pressure event
-    //
-    // The input system fires this event before processing a channel pressure
-    // message on this device instance. It gives a target pitch bend object and
-    // a control value as event arguments. Note that the AxisControl hasn't
-    // been updated at this point.
     public event Action<AxisControl, float> onWillChannelPressure
     {
-        // Action list lazy allocation
-        add => (_willChannelPressureActions = _willChannelPressureActions ??
-                new List<Action<AxisControl, float>>()).Add(value);
+        add => (_willChannelPressureActions ??= new()).Add(value);
         remove => _willChannelPressureActions.Remove(value);
     }
 
     // Will-pitch-bend event
-    //
-    // The input system fires this event before processing a pitch bend message
-    // on this device instance. It gives a target pitch bend object and a
-    // control value as event arguments. Note that the AxisControl hasn't been
-    // updated at this point.
     public event Action<AxisControl, float> onWillPitchBend
     {
-        // Action list lazy allocation
-        add => (_willPitchBendActions = _willPitchBendActions ??
-                new List<Action<AxisControl, float>>()).Add(value);
+        add => (_willPitchBendActions ??= new()).Add(value);
         remove => _willPitchBendActions.Remove(value);
     }
 
     #endregion
 
-    #region Internal objects
+    #region Private objects
 
-    MidiNoteControl [] _notes;
-    MidiValueControl [] _controls;
+    MidiNoteControl[] _notes;
+    MidiValueControl[] _controls;
     AxisControl _channelPressure;
     AxisControl _pitchBend;
 
@@ -141,14 +104,16 @@ public sealed class MidiDevice : InputDevice
 
     internal void QueueNoteOn(byte note, byte velocity)
     {
+        var ctrl = _notes[note];
+
         // Force note-off before note-on
         // The MIDI specification allows consecutive note-on messages. To
         // handle this, we insert a dummy note-off before every note-on. This
         // is ignored if the note is already off.
-        InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
+        InputSystem.QueueDeltaStateEvent(ctrl, (byte)0);
 
         // State update with a delta event
-        InputSystem.QueueDeltaStateEvent(_notes[note], velocity);
+        InputSystem.QueueDeltaStateEvent(ctrl, velocity);
     }
 
     internal void InvokeNoteOn(byte note, byte velocity)
@@ -160,11 +125,11 @@ public sealed class MidiDevice : InputDevice
             return;
         }
 
-        // Note-on event invocation (only when it exists)
-        var fvelocity = velocity / 127.0f;
+        // Note-on event invocation
+        var (ctrl, fval) = (_notes[note], velocity / 127.0f);
         if (_willNoteOnActions != null)
             foreach (var action in _willNoteOnActions)
-                action(_notes[note], fvelocity);
+                action(ctrl, fval);
     }
 
     internal void QueueNoteOff(byte note)
@@ -172,10 +137,10 @@ public sealed class MidiDevice : InputDevice
 
     internal void InvokeNoteOff(byte note)
     {
-        // Note-off event invocation (only when it exists)
+        var ctrl = _notes[note];
         if (_willNoteOffActions != null)
             foreach (var action in _willNoteOffActions)
-                action(_notes[note]);
+                action(ctrl);
     }
 
     internal void QueueAftertouch(byte note, byte pressure)
@@ -183,11 +148,10 @@ public sealed class MidiDevice : InputDevice
 
     internal void InvokeAftertouch(byte note, byte pressure)
     {
-        // Aftertouch event invocation (only when it exists)
-        var fpressure = pressure / 127.0f;
+        var (ctrl, fval) = (_notes[note], pressure / 127.0f);
         if (_willAftertouchActions != null)
             foreach (var action in _willAftertouchActions)
-                action(_notes[note], fpressure);
+                action(ctrl, fval);
     }
 
     internal void QueueControlChange(byte number, byte value)
@@ -195,11 +159,10 @@ public sealed class MidiDevice : InputDevice
 
     internal void InvokeControlChange(byte number, byte value)
     {
-        // Control-change event invocation (only when it exists)
-        var fvalue = value / 127.0f;
+        var (ctrl, fval) = (_controls[number], value / 127.0f);
         if (_willControlChangeActions != null)
             foreach (var action in _willControlChangeActions)
-                action(_controls[number], fvalue);
+                action(ctrl, fval);
     }
 
     internal void QueueChannelPressure(byte pressure)
@@ -207,11 +170,10 @@ public sealed class MidiDevice : InputDevice
 
     internal void InvokeChannelPressure(byte pressure)
     {
-        // Channel-pressure event invocation (only when it exists)
-        var fvalue = pressure / 127.0f;
+        var fval = pressure / 127.0f;
         if (_willChannelPressureActions != null)
             foreach (var action in _willChannelPressureActions)
-                action(_channelPressure, fvalue);
+                action(_channelPressure, fval);
     }
 
     internal void QueuePitchBend(ushort value)
@@ -219,11 +181,10 @@ public sealed class MidiDevice : InputDevice
 
     internal void InvokePitchBend(ushort value)
     {
-        // Pitch-bend event invocation (only when it exists)
-        var fvalue = (float)(value - 0x2000) / 0x2000;
+        var fval = (float)(value - 0x2000) / 0x2000;
         if (_willPitchBendActions != null)
             foreach (var action in _willPitchBendActions)
-                action(_pitchBend, fvalue);
+                action(_pitchBend, fval);
     }
 
     #endregion
@@ -234,22 +195,21 @@ public sealed class MidiDevice : InputDevice
     {
         base.FinishSetup();
 
-        // Populate the input controls.
         _notes = new MidiNoteControl[128];
         _controls = new MidiValueControl[128];
 
+        // Child control reference initialization
         for (var i = 0; i < 128; i++)
         {
-            _notes[i] = GetChildControl<MidiNoteControl>("note" + i.ToString("D3"));
-            _controls[i] = GetChildControl<MidiValueControl>("control" + i.ToString("D3"));
+            _notes[i] = (MidiNoteControl)allControls[i];
+            _controls[i] = (MidiValueControl)allControls[i + 128];
         }
+        _pitchBend = (AxisControl)allControls[256];
+        _channelPressure = (AxisControl)allControls[257];
 
-        _channelPressure = GetChildControl<AxisControl>("channelPressure");
-        _pitchBend = GetChildControl<AxisControl>("pitchBend");
-
-        // MIDI channel number determination
-        // Here is a dirty trick: Parse the last two characters in the product
-        // name and use it as a channel number.
+        // MIDI channel number determination from device name
+        // Uses a heuristic: Parses the last two characters of the product name
+        // and interprets them as the channel number.
         var product = description.product;
         channel = int.Parse(product.Substring(product.Length - 2));
     }
