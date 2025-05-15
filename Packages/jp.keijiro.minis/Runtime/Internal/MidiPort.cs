@@ -26,11 +26,7 @@ sealed class MidiPort : System.IDisposable
     {
         if (_channels[channel] == null)
         {
-            var desc = new InputDeviceDescription
-              { interfaceName = "Minis",
-                deviceClass = "MIDI",
-                product = _portName + " Channel " + channel,
-                capabilities = "{\"channel\":" + channel + "}" };
+            var desc = MidiUtility.MakeDeviceDescription(_portName, channel);
             _channels[channel] = (MidiDevice)InputSystem.AddDevice(desc);
         }
         return _channels[channel];

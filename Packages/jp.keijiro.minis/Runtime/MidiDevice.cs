@@ -198,20 +198,16 @@ public sealed class MidiDevice : InputDevice
         _notes = new MidiNoteControl[128];
         _controls = new MidiValueControl[128];
 
-        // Child control reference initialization
         for (var i = 0; i < 128; i++)
         {
             _notes[i] = (MidiNoteControl)allControls[i];
             _controls[i] = (MidiValueControl)allControls[i + 128];
         }
+
         _pitchBend = (AxisControl)allControls[256];
         _channelPressure = (AxisControl)allControls[257];
 
-        // MIDI channel number determination from device name
-        // Uses a heuristic: Parses the last two characters of the product name
-        // and interprets them as the channel number.
-        var product = description.product;
-        channel = int.Parse(product.Substring(product.Length - 2));
+        channel = MidiUtility.InferChannelIndexFromDescription(description);
     }
 
     public static MidiDevice current { get; private set; }
