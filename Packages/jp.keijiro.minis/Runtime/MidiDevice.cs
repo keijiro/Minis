@@ -90,6 +90,8 @@ public sealed class MidiDevice : InputDevice
     MidiValueControl[] _controls;
     AxisControl _channelPressure;
     AxisControl _pitchBend;
+    AxisControl _anyNoteNumber;
+    ButtonControl _anyNoteVelocity;
 
     List<Action<MidiNoteControl, float>> _willNoteOnActions;
     List<Action<MidiNoteControl>> _willNoteOffActions;
@@ -98,6 +100,8 @@ public sealed class MidiDevice : InputDevice
     List<Action<AxisControl, float>> _willChannelPressureActions;
     List<Action<AxisControl, float>> _willPitchBendActions;
 
+    AnyNoteTracker _anyNote = new();
+
     #endregion
 
     #region MIDI event receiver (invoked from MidiPort)
@@ -105,15 +109,19 @@ public sealed class MidiDevice : InputDevice
     internal void QueueNoteOn(byte note, byte velocity)
     {
         var ctrl = _notes[note];
+        _anyNote.NoteOn(note, velocity);
 
         // Force note-off before note-on
         // The MIDI specification allows consecutive note-on messages. To
         // handle this, we insert a dummy note-off before every note-on. This
         // is ignored if the note is already off.
         InputSystem.QueueDeltaStateEvent(ctrl, (byte)0);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, (byte)0);
 
         // State update with a delta event
         InputSystem.QueueDeltaStateEvent(ctrl, velocity);
+        InputSystem.QueueDeltaStateEvent(_anyNoteNumber, _anyNote.Note);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, _anyNote.Velocity);
     }
 
     internal void InvokeNoteOn(byte note, byte velocity)
@@ -133,7 +141,12 @@ public sealed class MidiDevice : InputDevice
     }
 
     internal void QueueNoteOff(byte note)
-      => InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
+    {
+        _anyNote.NoteOff(note);
+        InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
+        InputSystem.QueueDeltaStateEvent(_anyNoteNumber, _anyNote.Note);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, _anyNote.Velocity);
+    }
 
     internal void InvokeNoteOff(byte note)
     {
@@ -144,7 +157,10 @@ public sealed class MidiDevice : InputDevice
     }
 
     internal void QueueAftertouch(byte note, byte pressure)
-      => InputSystem.QueueDeltaStateEvent(_notes[note], pressure);
+    {
+        InputSystem.QueueDeltaStateEvent(_notes[note], pressure);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, pressure);
+    }
 
     internal void InvokeAftertouch(byte note, byte pressure)
     {
@@ -166,7 +182,10 @@ public sealed class MidiDevice : InputDevice
     }
 
     internal void QueueChannelPressure(byte pressure)
-      => InputSystem.QueueDeltaStateEvent(_channelPressure, pressure);
+    {
+        InputSystem.QueueDeltaStateEvent(_channelPressure, pressure);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, pressure);
+    }
 
     internal void InvokeChannelPressure(byte pressure)
     {
@@ -206,6 +225,8 @@ public sealed class MidiDevice : InputDevice
 
         _pitchBend = (AxisControl)allControls[256];
         _channelPressure = (AxisControl)allControls[257];
+        _anyNoteNumber = (AxisControl)allControls[258];
+        _anyNoteVelocity = (ButtonControl)allControls[259];
 
         channel = MidiUtility.InferChannelIndexFromDescription(description);
     }

@@ -282,6 +282,16 @@ public unsafe struct MidiDeviceState : IInputStateTypeInfo
                   layout= "Axis", format = "BYTE",
                   parameters = "normalize = true, normalizeMax = 0.49803921568")]
     public byte channelPressure;
+
+    [InputControl(name = "anyNoteNumber", displayName = "Any Note (Note Number)", shortDisplayName = "AnyNoteNum.",
+                  layout= "Axis", format = "BYTE",
+                  parameters = "scale = true, scaleFactor = 255")]
+    public byte anyNoteNumber;
+
+    [InputControl(name = "anyNoteVelocity", displayName = "Any Note (Velocity)", shortDisplayName = "AnyNoteVel.",
+                  layout= "Button", format = "BYTE",
+                  parameters = "normalize = true, normalizeMax = 0.49803921568")]
+    public byte anyNoteVelocity;
 }
 
 } // namespace Minis
