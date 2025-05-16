@@ -9,10 +9,8 @@ namespace Minis {
 //
 // MIDI port class for relaying RtMidi input to an Input System device
 //
-// The callback from RtMidi is invoked on a non-main thread. We immediately
-// update the input device state to ensure accurate timestamps. At the same
-// time, MIDI events are pushed into a concurrent queue and processed later on
-// the main thread to provide a better experience for user-defined callbacks.
+// The callback from RtMidi is invoked on a non-main thread. MIDI events are
+// pushed into a concurrent queue and processed later on the main thread.
 //
 sealed class MidiPort : System.IDisposable
 {
@@ -42,12 +40,12 @@ sealed class MidiPort : System.IDisposable
     {
         switch (evt.EventType)
         {
-            case 0x8: device.QueueNoteOff(evt.Data1); break;
-            case 0x9: device.QueueNoteOn(evt.Data1, evt.Data2); break;
-            case 0xa: device.QueueAftertouch(evt.Data1, evt.Data2); break;
-            case 0xb: device.QueueControlChange(evt.Data1, evt.Data2); break;
-            case 0xd: device.QueueChannelPressure(evt.Data1); break;
-            case 0xe: device.QueuePitchBend(evt.CombinedData); break;
+            case 0x8: device.QueueNoteOff(evt); break;
+            case 0x9: device.QueueNoteOn(evt); break;
+            case 0xa: device.QueueAftertouch(evt); break;
+            case 0xb: device.QueueControlChange(evt); break;
+            case 0xd: device.QueueChannelPressure(evt); break;
+            case 0xe: device.QueuePitchBend(evt); break;
         }
     }
 
@@ -55,26 +53,18 @@ sealed class MidiPort : System.IDisposable
     {
         switch (evt.EventType)
         {
-            case 0x8: device.InvokeNoteOff(evt.Data1); break;
-            case 0x9: device.InvokeNoteOn(evt.Data1, evt.Data2); break;
-            case 0xa: device.InvokeAftertouch(evt.Data1, evt.Data2); break;
-            case 0xb: device.InvokeControlChange(evt.Data1, evt.Data2); break;
-            case 0xd: device.InvokeChannelPressure(evt.Data1); break;
-            case 0xe: device.InvokePitchBend(evt.CombinedData); break;
+            case 0x8: device.InvokeNoteOff(evt); break;
+            case 0x9: device.InvokeNoteOn(evt); break;
+            case 0xa: device.InvokeAftertouch(evt); break;
+            case 0xb: device.InvokeControlChange(evt); break;
+            case 0xd: device.InvokeChannelPressure(evt); break;
+            case 0xe: device.InvokePitchBend(evt); break;
         }
     }
 
     // RtMidiIn callback
-    // We can update the input device state only after the device object has
-    // been created. If now yet available, we defer the update to the later
-    // process (ProcessEventQueue) on the main thread.
     void OnMessageReceived(double time, ReadOnlySpan<byte> message)
-    {
-        var channel = message[0] & 0xf;
-        var evt = new MidiEvent(message, defer: _channels[channel] == null);
-        if (!evt.Defer) UpdateDeviceState(_channels[channel], evt);
-        _eventQueue.Enqueue(evt);
-    }
+      => _eventQueue.Enqueue(new MidiEvent(message, MidiUtility.GetTime()));
 
     #endregion
 
@@ -109,7 +99,7 @@ sealed class MidiPort : System.IDisposable
         for (MidiEvent evt; _eventQueue.TryDequeue(out evt);)
         {
             var device = GetOrCreateChannelDevice(evt.Channel);
-            if (evt.Defer) UpdateDeviceState(device, evt);
+            UpdateDeviceState(device, evt);
             InvokeUserCallback(device, evt);
         }
     }

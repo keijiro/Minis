@@ -106,104 +106,97 @@ public sealed class MidiDevice : InputDevice
 
     #region MIDI event receiver (invoked from MidiPort)
 
-    internal void QueueNoteOn(byte note, byte velocity)
+    internal void QueueNoteOn(in MidiEvent e)
     {
-        var ctrl = _notes[note];
-        _anyNote.NoteOn(note, velocity);
+        _anyNote.NoteOn(e.Number, e.Value);
 
         // Force note-off before note-on
         // The MIDI specification allows consecutive note-on messages. To
         // handle this, we insert a dummy note-off before every note-on. This
         // is ignored if the note is already off.
-        InputSystem.QueueDeltaStateEvent(ctrl, (byte)0);
-        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, (byte)0);
+        InputSystem.QueueDeltaStateEvent(_notes[e.Number], (byte)0, e.Time);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, (byte)0, e.Time);
 
         // State update with a delta event
-        InputSystem.QueueDeltaStateEvent(ctrl, velocity);
-        InputSystem.QueueDeltaStateEvent(_anyNoteNumber, _anyNote.Note);
-        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, _anyNote.Velocity);
+        InputSystem.QueueDeltaStateEvent(_notes[e.Number], e.Value, e.Time);
+        InputSystem.QueueDeltaStateEvent(_anyNoteNumber, _anyNote.Note, e.Time);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, _anyNote.Velocity, e.Time);
     }
 
-    internal void InvokeNoteOn(byte note, byte velocity)
+    internal void InvokeNoteOn(in MidiEvent e)
     {
         // Special case: Zero velocity = Note-off
-        if (velocity == 0)
+        if (e.Value == 0)
         {
-            InvokeNoteOff(note);
+            InvokeNoteOff(e);
             return;
         }
 
         // Note-on event invocation
-        var (ctrl, fval) = (_notes[note], velocity / 127.0f);
         if (_willNoteOnActions != null)
             foreach (var action in _willNoteOnActions)
-                action(ctrl, fval);
+                action(_notes[e.Number], e.FloatValue);
     }
 
-    internal void QueueNoteOff(byte note)
+    internal void QueueNoteOff(in MidiEvent e)
     {
-        _anyNote.NoteOff(note);
-        InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
-        InputSystem.QueueDeltaStateEvent(_anyNoteNumber, _anyNote.Note);
-        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, _anyNote.Velocity);
+        _anyNote.NoteOff(e.Number);
+        InputSystem.QueueDeltaStateEvent(_notes[e.Number], (byte)0, e.Time);
+        InputSystem.QueueDeltaStateEvent(_anyNoteNumber, _anyNote.Note, e.Time);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, _anyNote.Velocity, e.Time);
     }
 
-    internal void InvokeNoteOff(byte note)
+    internal void InvokeNoteOff(in MidiEvent e)
     {
-        var ctrl = _notes[note];
         if (_willNoteOffActions != null)
             foreach (var action in _willNoteOffActions)
-                action(ctrl);
+                action(_notes[e.Number]);
     }
 
-    internal void QueueAftertouch(byte note, byte pressure)
+    internal void QueueAftertouch(in MidiEvent e)
     {
-        InputSystem.QueueDeltaStateEvent(_notes[note], pressure);
-        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, pressure);
+        InputSystem.QueueDeltaStateEvent(_notes[e.Number], e.Value, e.Time);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, e.Value, e.Time);
     }
 
-    internal void InvokeAftertouch(byte note, byte pressure)
+    internal void InvokeAftertouch(in MidiEvent e)
     {
-        var (ctrl, fval) = (_notes[note], pressure / 127.0f);
         if (_willAftertouchActions != null)
             foreach (var action in _willAftertouchActions)
-                action(ctrl, fval);
+                action(_notes[e.Number], e.FloatValue);
     }
 
-    internal void QueueControlChange(byte number, byte value)
-      => InputSystem.QueueDeltaStateEvent(_controls[number], value);
+    internal void QueueControlChange(in MidiEvent e)
+      => InputSystem.QueueDeltaStateEvent(_controls[e.Number], e.Value, e.Time);
 
-    internal void InvokeControlChange(byte number, byte value)
+    internal void InvokeControlChange(in MidiEvent e)
     {
-        var (ctrl, fval) = (_controls[number], value / 127.0f);
         if (_willControlChangeActions != null)
             foreach (var action in _willControlChangeActions)
-                action(ctrl, fval);
+                action(_controls[e.Number], e.FloatValue);
     }
 
-    internal void QueueChannelPressure(byte pressure)
+    internal void QueueChannelPressure(in MidiEvent e)
     {
-        InputSystem.QueueDeltaStateEvent(_channelPressure, pressure);
-        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, pressure);
+        InputSystem.QueueDeltaStateEvent(_channelPressure, e.Value, e.Time);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, e.Value, e.Time);
     }
 
-    internal void InvokeChannelPressure(byte pressure)
+    internal void InvokeChannelPressure(in MidiEvent e)
     {
-        var fval = pressure / 127.0f;
         if (_willChannelPressureActions != null)
             foreach (var action in _willChannelPressureActions)
-                action(_channelPressure, fval);
+                action(_channelPressure, e.FloatValue);
     }
 
-    internal void QueuePitchBend(ushort value)
-      => InputSystem.QueueDeltaStateEvent(_pitchBend, value);
+    internal void QueuePitchBend(in MidiEvent e)
+      => InputSystem.QueueDeltaStateEvent(_pitchBend, e.CombinedValue, e.Time);
 
-    internal void InvokePitchBend(ushort value)
+    internal void InvokePitchBend(in MidiEvent e)
     {
-        var fval = (float)(value - 0x2000) / 0x2000;
         if (_willPitchBendActions != null)
             foreach (var action in _willPitchBendActions)
-                action(_pitchBend, fval);
+                action(_pitchBend, e.CombinedFloatValue);
     }
 
     #endregion
