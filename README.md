@@ -90,19 +90,6 @@ The MIDI Device Assigner is a utility for binding MIDI devices to PlayerInput.
 You can specify a MIDI channel and product name as matching criteria. It
 assigns the matched device to a PlayerInput component on the same GameObject.
 
-## Scripting Samples
-
-This repository includes C# scripting examples demonstrating how to use Minis.
-
-[**DeviceCallback.cs**](Assets/Script/DeviceCallback.cs) – Defines a callback
-for MIDI device additions and removals.
-
-[**DeviceQuery.cs**](Assets/Script/DeviceQuery.cs) – Demonstrates searching for
-MIDI devices using product name and channel filters.
-
-[**NoteCallback.cs**](Assets/Script/NoteCallback.cs) – Defines a callback for
-receiving MIDI note-on and note-off events.
-
 ## Frequently Asked Questions
 
 #### Does it support MIDI out?

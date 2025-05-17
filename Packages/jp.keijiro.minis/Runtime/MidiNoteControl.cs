@@ -20,6 +20,9 @@ public class MidiNoteControl : ButtonControl
         pressPoint = 1.0f / 127;
     }
 
+    // MIDI channel index
+    public int channel => ((MidiDevice)device).channel;
+
     // MIDI note number
     public int noteNumber => (int)stateOffsetRelativeToDeviceRoot;
 

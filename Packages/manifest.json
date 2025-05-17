@@ -9,6 +9,6 @@
     }
   ],
   "dependencies": {
-    "com.unity.timeline": "1.8.8"
+      "jp.keijiro.klak.ui-toolkit-assets": "0.1.1"
   }
 }

@@ -17,6 +17,9 @@ public class MidiValueControl : AxisControl
         normalizeMax = 0.49803921568f;
     }
 
+    // MIDI channel index
+    public int channel => ((MidiDevice)device).channel;
+
     // MIDI control (CC) number
     public int controlNumber => (int)stateOffsetRelativeToDeviceRoot - 128;
 }
