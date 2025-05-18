@@ -49,7 +49,7 @@ sealed public class InputActionTest : MonoBehaviour
     void Update()
     {
         var decay = Time.deltaTime * 4;
-        var text = "This sample only accept notes from octave 3 to 5.\n\n";
+        var text = "Only accepts notes from octave 3 to 5.\n\n";
 
         for (var i = 0; i < 12; i++)
         {
@@ -60,7 +60,7 @@ sealed public class InputActionTest : MonoBehaviour
         }
 
         var mod = _modWheelAction.ReadValue<float>();
-        text += MakeRowText("Mod Wheel", mod);
+        text += MakeRowText("Mod", mod);
 
         InfoLabelUI.text = text;
     }
@@ -70,17 +70,17 @@ sealed public class InputActionTest : MonoBehaviour
     #region UI helpers
 
     Label InfoLabelUI
-      => GetComponent<UIDocument>().rootVisualElement.Q<Label>("info-label");
+      => GetComponent<UIDocument>().rootVisualElement.Q<Label>("note-label");
 
     string MakeRowText(string name, float value, float fade = 1)
     {
-        const int width = 30;
+        const int width = 24;
         var bar = (int)(value * width);
         var hex = $"{(int)(fade * 0x7f + 0x80):X2}";
-        var text = $"{name,10} |<color=#{hex}{hex}{hex}>";
+        var text = $"{name,3}|<color=#{hex}{hex}{hex}>";
         text += new string('*', bar);
         text += new string(' ', width - bar);
-        text += $"</color>| {value * 100,3:0}%\n";
+        text += $"</color>|{value * 100,3:0}%\n";
         return text;
     }
 

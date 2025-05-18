@@ -130,6 +130,8 @@ GameObject:
   - component: {fileID: 736795145}
   - component: {fileID: 736795144}
   - component: {fileID: 736795146}
+  - component: {fileID: 736795148}
+  - component: {fileID: 736795147}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -586,6 +588,47 @@ MonoBehaviour:
       m_Action: Mod Wheel
       m_Flags: 0
     m_Flags: 0
+--- !u!114 &736795147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736795142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dca676fe8c5cd41f2951188e76d0624b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _action:
+    m_Name: Action
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 4dd68f01-9480-424a-ac25-a9abe3923a2d
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 986dff54-6347-4808-a05d-4e78729ca688
+      m_Path: <MidiDevice>/anyNoteVelocity
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 0
+    m_Flags: 0
+--- !u!114 &736795148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736795142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15511ade9f4d14af694ed2252dd4c8c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1108464431
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,7 +656,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.11276256, g: 0.12027314, b: 0.13207549, a: 0}
+  m_BackGroundColor: {r: 0.092, g: 0.092, b: 0.092, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

@@ -94,7 +94,7 @@ sealed public class CallbackTest : MonoBehaviour
       => string.Join("\n", _logLines);
 
     Label UIInfoLabel
-      => GetComponent<UIDocument>().rootVisualElement.Q<Label>("info-label");
+      => GetComponent<UIDocument>().rootVisualElement.Q<Label>("event-label");
 
     void AddLog(string line)
     {

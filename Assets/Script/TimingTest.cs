@@ -42,7 +42,7 @@ sealed public class TimingTest : MonoBehaviour
       => string.Join("\n", _logLines);
 
     Label UIInfoLabel
-      => GetComponent<UIDocument>().rootVisualElement.Q<Label>("info-label");
+      => GetComponent<UIDocument>().rootVisualElement.Q<Label>("tempo-label");
 
     void AddLog(string line)
     {

@@ -1,5 +1,22 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="container" style="position: absolute; top: 30px; left: 30px; right: 30px; bottom: 30px;">
-        <ui:Label text="Label" name="info-label" style="-unity-font-definition: url(&quot;project://database/Packages/jp.keijiro.klak.ui-toolkit-assets/Runtime/Fonts/Inconsolata/static/Inconsolata-Light.ttf?fileID=12800000&amp;guid=b2bcb3ab3bd874080be73a0b61eec345&amp;type=3#Inconsolata-Light&quot;); overflow: hidden; -unity-text-align: lower-left; white-space: normal;" />
+    <Style src="project://database/Assets/UI/Monitor.uss?fileID=7433441132597879392&amp;guid=654a31a1c14474c9cb4f3e8080c62c68&amp;type=3#Monitor" />
+    <ui:VisualElement name="root" style="position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;">
+        <ui:VisualElement name="upper-part" style="height: 75%; flex-direction: row;">
+            <ui:VisualElement name="left-side" style="width: 50%;">
+                <ui:VisualElement name="panel1" class="panel">
+                    <ui:Label text="Label" name="note-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="right-side" style="width: 50%;">
+                <ui:VisualElement name="panel2" class="panel">
+                    <ui:Label text="Label" name="event-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="bottom-part" style="height: 25%;">
+            <ui:VisualElement name="panel3" class="panel">
+                <ui:Label text="Label" name="tempo-label" />
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
