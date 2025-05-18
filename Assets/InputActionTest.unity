@@ -1,0 +1,677 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_OcclusionBakeSettings:
+    smallestOccluder: 5
+    smallestHole: 0.25
+    backfaceThreshold: 100
+  m_SceneGUID: 00000000000000000000000000000000
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 10
+  m_Fog: 0
+  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_FogMode: 3
+  m_FogDensity: 0.01
+  m_LinearFogStart: 0
+  m_LinearFogEnd: 300
+  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
+  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientIntensity: 1
+  m_AmbientMode: 0
+  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_HaloStrength: 0.5
+  m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
+  m_HaloTexture: {fileID: 0}
+  m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
+  m_DefaultReflectionMode: 0
+  m_DefaultReflectionResolution: 128
+  m_ReflectionBounces: 1
+  m_ReflectionIntensity: 1
+  m_CustomReflection: {fileID: 0}
+  m_Sun: {fileID: 0}
+  m_UseRadianceAmbientProbe: 0
+--- !u!157 &3
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
+  m_GISettings:
+    serializedVersion: 2
+    m_BounceScale: 1
+    m_IndirectOutputScale: 1
+    m_AlbedoBoost: 1
+    m_EnvironmentLightingMode: 0
+    m_EnableBakedLightmaps: 1
+    m_EnableRealtimeLightmaps: 0
+  m_LightmapEditorSettings:
+    serializedVersion: 12
+    m_Resolution: 2
+    m_BakeResolution: 40
+    m_AtlasSize: 1024
+    m_AO: 0
+    m_AOMaxDistance: 1
+    m_CompAOExponent: 1
+    m_CompAOExponentDirect: 0
+    m_ExtractAmbientOcclusion: 0
+    m_Padding: 2
+    m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
+    m_TextureCompression: 1
+    m_ReflectionCompression: 2
+    m_MixedBakeMode: 2
+    m_BakeBackend: 1
+    m_PVRSampling: 1
+    m_PVRDirectSampleCount: 32
+    m_PVRSampleCount: 512
+    m_PVRBounces: 2
+    m_PVREnvironmentSampleCount: 256
+    m_PVREnvironmentReferencePointCount: 2048
+    m_PVRFilteringMode: 1
+    m_PVRDenoiserTypeDirect: 1
+    m_PVRDenoiserTypeIndirect: 1
+    m_PVRDenoiserTypeAO: 1
+    m_PVRFilterTypeDirect: 0
+    m_PVRFilterTypeIndirect: 0
+    m_PVRFilterTypeAO: 0
+    m_PVREnvironmentMIS: 1
+    m_PVRCulling: 1
+    m_PVRFilteringGaussRadiusDirect: 1
+    m_PVRFilteringGaussRadiusIndirect: 1
+    m_PVRFilteringGaussRadiusAO: 1
+    m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+    m_PVRFilteringAtrousPositionSigmaIndirect: 2
+    m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
+  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
+  m_LightingSettings: {fileID: 0}
+--- !u!196 &4
+NavMeshSettings:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    serializedVersion: 3
+    agentTypeID: 0
+    agentRadius: 0.5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: 0.4
+    ledgeDropHeight: 0
+    maxJumpAcrossDistance: 0
+    minRegionArea: 2
+    manualCellSize: 0
+    cellSize: 0.16666667
+    manualTileSize: 0
+    tileSize: 256
+    buildHeightMesh: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
+    debug:
+      m_Flags: 0
+  m_NavMeshData: {fileID: 0}
+--- !u!1 &736795142
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 736795145}
+  - component: {fileID: 736795144}
+  - component: {fileID: 736795146}
+  m_Layer: 5
+  m_Name: UI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &736795144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736795142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: e8c9c792a3b6846a2a471fbe03bbe9f6, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 4017884bd923c4fa38c2ba21de9d98bf,
+    type: 3}
+  m_SortingOrder: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+--- !u!4 &736795145
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736795142}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &736795146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736795142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df58902d991454bceac7c2632cb6ef51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _noteActions:
+  - m_Name: Element 0
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 36581f07-32ff-44a1-a245-818c5798cbda
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 1569a830-a1df-41e5-8cf7-55e62bcf47f7
+      m_Path: <MidiDevice>/note048
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 0
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 0223d40e-a541-4cfc-8ffd-4993efe9b861
+      m_Path: <MidiDevice>/note060
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 0
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 29886e3b-50ac-490d-baa2-b961e4bd16a7
+      m_Path: <MidiDevice>/note072
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 0
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 1
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: cc973bfd-91c2-4d11-8f5c-f1112c4d06f2
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 8d74bf4a-7fd6-4d6a-8f8d-04120561117d
+      m_Path: <MidiDevice>/note049
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 1
+      m_Flags: 0
+    - m_Name: 
+      m_Id: fcd4aaa5-8264-40ba-9afe-d2189bd7fe1a
+      m_Path: <MidiDevice>/note061
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 1
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 4d010a60-6d88-4499-a181-87a6c31cfe73
+      m_Path: <MidiDevice>/note073
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 1
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 2
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 4e4c6a25-285f-4b9c-b3c5-fa0330f0b6a3
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 8f252bcf-83da-45cb-842d-cc27b9279c73
+      m_Path: <MidiDevice>/note050
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 2
+      m_Flags: 0
+    - m_Name: 
+      m_Id: e3abcf3b-70f2-463a-9952-182d0ca0e609
+      m_Path: <MidiDevice>/note062
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 2
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 94be3b1e-7e57-4a1f-b253-e0f83c1b83cf
+      m_Path: <MidiDevice>/note074
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 2
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 3
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: a4e4a9d7-2685-47a8-b80b-6e88ea7679ad
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: c79c9de5-5bf3-4762-a24b-f9fb16d46d70
+      m_Path: <MidiDevice>/note051
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 3
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 211212d3-803e-4fd6-a156-ea745fe9b1f7
+      m_Path: <MidiDevice>/note063
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 3
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 3ca6e2ec-ae3f-405f-a2dc-79e118de3269
+      m_Path: <MidiDevice>/note075
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 3
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 4
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: cda59ce9-7b5d-4d91-b523-342e2201bc02
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 109604fa-9dc1-4e63-9621-688552eb5e78
+      m_Path: <MidiDevice>/note052
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 4
+      m_Flags: 0
+    - m_Name: 
+      m_Id: cac1a1d9-7b20-4106-abb9-634d9593417d
+      m_Path: <MidiDevice>/note064
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 4
+      m_Flags: 0
+    - m_Name: 
+      m_Id: fb9b4f19-b277-4a80-8ded-7c8a6ed99018
+      m_Path: <MidiDevice>/note076
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 4
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 5
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 893495a9-8c4a-4a08-be41-c6c37d22f6e5
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: c5679fe3-d7ff-4268-b406-41f55f98efd6
+      m_Path: <MidiDevice>/note053
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 5
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 64761da2-9d3a-420c-b317-34907822c43a
+      m_Path: <MidiDevice>/note065
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 5
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 6cb0e37e-aa68-4c1e-8ce2-b681ab6cf1c0
+      m_Path: <MidiDevice>/note077
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 5
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 6
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 99858ae1-b5d1-4942-b466-219da8898345
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 8201c203-3da7-4983-af58-042c394d26b3
+      m_Path: <MidiDevice>/note054
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 6
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 42d30333-9f15-4344-ab20-b9b70bc041ce
+      m_Path: <MidiDevice>/note066
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 6
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 4aa61299-9e62-4df5-9e03-629093040186
+      m_Path: <MidiDevice>/note078
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 6
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 7
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 255955dd-6da5-40a9-88e6-d7afd1287705
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: c2514d92-f50a-43ce-a217-f967d053e8a4
+      m_Path: <MidiDevice>/note055
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 7
+      m_Flags: 0
+    - m_Name: 
+      m_Id: d2ff8855-6166-40b3-bf88-7b54aad87cf9
+      m_Path: <MidiDevice>/note067
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 7
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 6ec1aa3f-e9ed-4895-b2ea-0cea16fbf43c
+      m_Path: <MidiDevice>/note079
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 7
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 8
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 8a388ac8-03d5-4522-8b93-7085ec45e384
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 9abb720d-15a5-4bfe-bc76-28a3aea6704e
+      m_Path: <MidiDevice>/note056
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 8
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 8f0d3d40-0223-4dbc-a9fa-8ef966719cfa
+      m_Path: <MidiDevice>/note068
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 8
+      m_Flags: 0
+    - m_Name: 
+      m_Id: f0a004b8-5822-43b7-ad4b-3b4fe1e561f5
+      m_Path: <MidiDevice>/note080
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 8
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 9
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: b38ba2d7-4333-46c2-a908-363ca7d5b664
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: db546b1f-a162-4772-84ca-4676d71a1ad5
+      m_Path: <MidiDevice>/note057
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 9
+      m_Flags: 0
+    - m_Name: 
+      m_Id: d909af67-f300-43da-976f-2c860a373235
+      m_Path: <MidiDevice>/note069
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 9
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 3c706a10-0086-485a-81dd-f9b2fcfcbad1
+      m_Path: <MidiDevice>/note081
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 9
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 10
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 7209cb1b-5620-44e1-8f3c-0c574280c570
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 0b424b62-4ea3-4f71-9736-d16f51dae4b8
+      m_Path: <MidiDevice>/note058
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 10
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 95536a25-c1a8-41fa-b926-0abf3b17a4db
+      m_Path: <MidiDevice>/note070
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 10
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 60e2d3e0-7bbe-4528-b0fc-0933ca5645f0
+      m_Path: <MidiDevice>/note082
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 10
+      m_Flags: 0
+    m_Flags: 0
+  - m_Name: Element 11
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 23eac593-6391-4a2f-8879-7b179e6ed34e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: a8f2215b-e7c8-4274-8c2b-cd7df19bc047
+      m_Path: <MidiDevice>/note059
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 11
+      m_Flags: 0
+    - m_Name: 
+      m_Id: bb6f0111-8448-4c2e-9092-0b40820fdf8a
+      m_Path: <MidiDevice>/note071
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 11
+      m_Flags: 0
+    - m_Name: 
+      m_Id: a3d0bb82-510f-467e-aad9-47e64383a25e
+      m_Path: <MidiDevice>/note083
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Element 11
+      m_Flags: 0
+    m_Flags: 0
+  _modWheelAction:
+    m_Name: Mod Wheel
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: abd30893-0393-47f5-bd25-847e5dc97776
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 8c663e5e-a47d-4d9e-bbf6-1e004aa9a872
+      m_Path: <MidiDevice>/control001
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Mod Wheel
+      m_Flags: 0
+    m_Flags: 0
+--- !u!1 &1108464431
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1108464433}
+  - component: {fileID: 1108464432}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!20 &1108464432
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108464431}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.11276256, g: 0.12027314, b: 0.13207549, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 0
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &1108464433
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108464431}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1108464433}
+  - {fileID: 736795145}
