@@ -161,8 +161,10 @@ public sealed class MidiDevice : InputDevice
 
     internal void QueueAftertouch(in MidiEvent e)
     {
-        InputSystem.QueueDeltaStateEvent(_notes[e.Number], e.Value, e.Time);
-        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, e.Value, e.Time);
+        // Avoid triggering note-off events when pressure is zero
+        var value = e.Value > 0 ? e.Value : (byte)1;
+        InputSystem.QueueDeltaStateEvent(_notes[e.Number], value, e.Time);
+        InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, value, e.Time);
     }
 
     internal void InvokeAftertouch(in MidiEvent e)
