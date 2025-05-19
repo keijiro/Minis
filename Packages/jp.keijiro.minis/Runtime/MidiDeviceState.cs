@@ -290,7 +290,7 @@ public unsafe struct MidiDeviceState : IInputStateTypeInfo
 
     [InputControl(name = "anyNoteVelocity", displayName = "Any Note (Velocity)", shortDisplayName = "AnyNoteVel.",
                   layout= "Button", format = "BYTE",
-                  parameters = "normalize = true, normalizeMax = 0.49803921568")]
+                  parameters = "normalize = true, normalizeMax = 0.49803921568, pressPoint = 0.007874015748")]
     public byte anyNoteVelocity;
 }
 
