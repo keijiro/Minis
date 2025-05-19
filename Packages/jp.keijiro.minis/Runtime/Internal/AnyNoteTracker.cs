@@ -20,12 +20,6 @@ sealed class AnyNoteTracker
 
     public void NoteOn(byte note, byte velocity)
     {
-        if (velocity == 0)
-        {
-            NoteOff(note);
-            return;
-        }
-
         if (note < 64)
             _noteBitField.lo |= 1ul << note;
         else

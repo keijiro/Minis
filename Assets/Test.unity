@@ -571,6 +571,22 @@ MonoBehaviour:
       m_Action: Element 11
       m_Flags: 0
     m_Flags: 0
+  - m_Name: Input Action
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 86e07ab8-9703-46c4-81a4-3a881da815ff
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: f8710e03-3bd0-4a0e-9dfd-7ddb0d78cc5e
+      m_Path: <MidiDevice>/anyNoteVelocity
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Action
+      m_Flags: 0
+    m_Flags: 0
   _modWheelAction:
     m_Name: Mod Wheel
     m_Type: 0
@@ -586,6 +602,23 @@ MonoBehaviour:
       m_Processors: 
       m_Groups: 
       m_Action: Mod Wheel
+      m_Flags: 0
+    m_Flags: 0
+  _anyNoteAction:
+    m_Name: Any Note
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 5071ce37-8c62-4bac-97ff-b56b5d0b3180
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: f5709f11-0034-4f5c-ac37-9c03424feb35
+      m_Path: <MidiDevice>/anyNoteNumber
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Any Note
       m_Flags: 0
     m_Flags: 0
 --- !u!114 &736795147

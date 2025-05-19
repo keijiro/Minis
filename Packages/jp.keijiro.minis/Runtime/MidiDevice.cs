@@ -108,7 +108,12 @@ public sealed class MidiDevice : InputDevice
 
     internal void QueueNoteOn(in MidiEvent e)
     {
-        _anyNote.NoteOn(e.Number, e.Value);
+        // Special case: Zero velocity = Note-off
+        if (e.Value == 0)
+        {
+            QueueNoteOff(e);
+            return;
+        }
 
         // Force note-off before note-on
         // The MIDI specification allows consecutive note-on messages. To
@@ -118,6 +123,7 @@ public sealed class MidiDevice : InputDevice
         InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, (byte)0, e.Time);
 
         // State update with a delta event
+        _anyNote.NoteOn(e.Number, e.Value);
         InputSystem.QueueDeltaStateEvent(_notes[e.Number], e.Value, e.Time);
         InputSystem.QueueDeltaStateEvent(_anyNoteNumber, _anyNote.Note, e.Time);
         InputSystem.QueueDeltaStateEvent(_anyNoteVelocity, _anyNote.Velocity, e.Time);

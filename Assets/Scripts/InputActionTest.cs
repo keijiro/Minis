@@ -9,14 +9,15 @@ sealed public class InputActionTest : MonoBehaviour
 
     [SerializeField] InputAction[] _noteActions = null;
     [SerializeField] InputAction _modWheelAction = null;
+    [SerializeField] InputAction _anyNoteAction = null;
 
     #endregion
 
     #region Private members
 
     static string[] NoteNames = new[] { "C", "C#", "D", "D#", "E", "F",
-                                        "F#", "G", "G#", "A", "A#", "B" };
-    float[] _noteFades = new float[12];
+                                        "F#", "G", "G#", "A", "A#", "B", "Any" };
+    float[] _noteFades = new float[13];
 
     #endregion
 
@@ -42,8 +43,9 @@ sealed public class InputActionTest : MonoBehaviour
 
     void Start()
     {
-        for (var i = 0; i < 12; i++) SetUpNoteAction(i);
+        for (var i = 0; i < NoteNames.Length; i++) SetUpNoteAction(i);
         _modWheelAction.Enable();
+        _anyNoteAction.Enable();
     }
 
     void Update()
@@ -51,7 +53,7 @@ sealed public class InputActionTest : MonoBehaviour
         var decay = Time.deltaTime * 4;
         var text = "Only accepts notes from octave 3 to 5.\n\n";
 
-        for (var i = 0; i < 12; i++)
+        for (var i = 0; i < NoteNames.Length; i++)
         {
             var fade = _noteFades[i];
             var pressure = _noteActions[i].ReadValue<float>();
@@ -61,6 +63,12 @@ sealed public class InputActionTest : MonoBehaviour
 
         var mod = _modWheelAction.ReadValue<float>();
         text += MakeRowText("Mod", mod);
+
+        if (_noteActions[12].inProgress)
+        {
+            var note = (int)_anyNoteAction.ReadValue<float>();
+            text += $"Any Note: {NoteNames[note % 12]}";
+        }
 
         InfoLabelUI.text = text;
     }
