@@ -29,30 +29,8 @@ static class MidiSystemWrangler
           (matches: new InputDeviceMatcher().WithInterface("Minis"));
     }
 
-    static void InsertPlayerLoopSystem()
-    {
-        var loop = PlayerLoop.GetCurrentPlayerLoop();
-
-        for (var i = 0; i < loop.subSystemList.Length; i++) 
-        {
-            ref var subsys = ref loop.subSystemList[i];
-            if (subsys.type != typeof(EarlyUpdate)) continue;
-
-            var target = new PlayerLoopSystem 
-              { type = typeof(MidiSystemWrangler),
-                updateDelegate = () => _driver?.Update() };
-
-            var len = subsys.subSystemList.Length;
-            Array.Resize(ref subsys.subSystemList, len + 1);
-            subsys.subSystemList[len] = target;
-
-            PlayerLoop.SetPlayerLoop(loop);
-            return;
-        }
-
-        throw new InvalidOperationException
-          ("Can't find EarlyUpdate player sub system.");
-    }
+    static void RegisterInputUpdates()
+      => InputSystem.onBeforeUpdate += () => _driver?.Update();
 
     #endregion
 
@@ -66,12 +44,8 @@ static class MidiSystemWrangler
     static MidiSystemWrangler()
     {
         RegisterLayout();
-        InsertPlayerLoopSystem();
+        RegisterInputUpdates();
         _driver = new MidiDriver();
-
-        // We use not only PlayerLoopSystem but also EditorApplication.update,
-        // since PlayerLoop events are not invoked in Edit Mode.
-        EditorApplication.update += () => _driver?.Update();
 
         // Uninstalls the driver on domain reload.
         AssemblyReloadEvents.beforeAssemblyReload +=
@@ -87,7 +61,7 @@ static class MidiSystemWrangler
     static void Initialize()
     {
         RegisterLayout();
-        InsertPlayerLoopSystem();
+        RegisterInputUpdates();
         _driver = new MidiDriver();
     }
 
