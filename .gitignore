@@ -8,6 +8,7 @@ Desktop.ini
 /.vscode
 /*.csproj
 /*.sln
+/*.slnx
 
 /Library
 /Logs
