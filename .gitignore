@@ -3,6 +3,12 @@ Desktop.ini
 .DS_Store
 *.swp
 
+/.idea
+/.vs
+/.vscode
+/*.csproj
+/*.sln
+
 /Library
 /Logs
 /Recordings
