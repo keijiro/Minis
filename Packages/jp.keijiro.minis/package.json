@@ -3,10 +3,10 @@
   "version": "1.3.1",
   "displayName": "Minis",
   "description": "Minis: MIDI Input plugin for Unity New Input System",
-  "unity": "2019.4",
+  "unity": "2022.3",
   "author": "Keijiro Takahashi",
   "dependencies": {
-    "jp.keijiro.rtmidi": "2.1.2",
+    "jp.keijiro.rtmidi": "2.2.0",
     "com.unity.inputsystem": "1.0.1",
     "com.unity.mathematics": "1.3.2",
     "com.unity.burst": "1.8.21"
