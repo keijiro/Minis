@@ -1,4 +1,9 @@
 {
+  "name": "jp.keijiro.minis",
+  "version": "1.3.1",
+  "displayName": "Minis",
+  "description": "Minis: MIDI Input plugin for Unity New Input System",
+  "unity": "2019.4",
   "author": "Keijiro Takahashi",
   "dependencies": {
     "jp.keijiro.rtmidi": "2.1.2",
@@ -6,13 +11,9 @@
     "com.unity.mathematics": "1.3.2",
     "com.unity.burst": "1.8.21"
   },
-  "description": "Minis: MIDI Input plugin for Unity New Input System",
-  "displayName": "Minis",
-  "keywords": [ "unity" ],
+  "changelogUrl": "https://github.com/keijiro/Minis/blob/master/CHANGELOG.md",
+  "documentationUrl": "https://github.com/keijiro/Minis",
+  "licensesUrl": "https://github.com/keijiro/Minis/blob/master/LICENSE",
   "license": "Unlicense",
-  "name": "jp.keijiro.minis",
-  "repository": "github:keijiro/Minis",
-  "unity": "2019.4",
-  "unityRelease": "0f1",
-  "version": "1.3.1"
+  "_upm": { "changelog": "" }
 }
