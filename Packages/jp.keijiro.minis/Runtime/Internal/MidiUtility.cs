@@ -1,7 +1,5 @@
-using System;
-using System.Reflection;
-using UnityEngine;
 using UnityEngine.InputSystem.Layouts;
+using UnityEngine.InputSystem.LowLevel;
 
 namespace Minis {
 
@@ -29,13 +27,7 @@ static class MidiUtility
 
     // Access to the internal current time property in Input System
     public static double GetTime()
-    {
-        var inputSystemType = Type.GetType
-          ("UnityEngineInternal.Input.NativeInputSystem, UnityEngine");
-        var currentTimeProperty = inputSystemType.GetProperty
-          ("currentTime", BindingFlags.Public | BindingFlags.Static);
-        return (double)currentTimeProperty.GetValue(null);
-    }
+      => InputState.currentTime;
 }
 
 } // namespace Minis
